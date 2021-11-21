@@ -1,10 +1,6 @@
 % X menunjukkan baris ke-X dan Y menunjukkan kolom ke-Y
 
-:- dynamic(posisi/2). % lokasi pemain -> ntar di main.pl
 :- dynamic(pos_digged/2). % lokasi digged tile
-
-posisi(1,1). %testing
-in_game(true).
 
 /* FAKTA */
 mapSize(10,10). % ukuran map
@@ -49,13 +45,9 @@ drawMap :-
   Rowborder2 is Row + 1,
   Colborder1 is 0,
   Colborder2 is Col + 1,
-  forall(between(Rowborder1,Rowborder2,I), (
-    forall(between(Colborder1,Colborder2,J), (
-      drawPos(I,J)
-    )),
-    nl
-  )),
+  forall(between(Rowborder1,Rowborder2,X), (forall(between(Colborder1,Colborder2,Y), (drawPos(X,Y))),nl)),
   !.
+/* referensi: https://learnxinyminutes.com/docs/prolog/ */
 
 /* fungsi untuk mengetahui apakah posisi (X,Y) berada di lokasi tertentu */
 atHouse(X,Y) :- pos_house(X_house, Y_house), X =:= X_house, Y =:= Y_house.
@@ -97,7 +89,8 @@ w :-
   !,
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
-  write('You moved north! Try using \'map\' to see your position now.').
+  write('You moved north! Try using \'map\' to see your position now.'),
+  addMove.
 
 /* s : bergerak ke selatan 1 langkah */
 s :-
@@ -131,7 +124,8 @@ s :-
   !,
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
-  write('You moved south! Try using \'map\' to see your position now.').
+  write('You moved south! Try using \'map\' to see your position now.'),
+  addMove.
 
 /* d : bergerak ke timur 1 langkah */
 d :-
@@ -165,7 +159,8 @@ d :-
   !,
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
-  write('You moved east! Try using \'map\' to see your position now.').
+  write('You moved east! Try using \'map\' to see your position now.'),
+  addMove.
 
 /* a : bergerak ke barat 1 langkah */
 a :-
@@ -199,4 +194,19 @@ a :-
   !,
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
-  write('You moved west! Try using \'map\' to see your position now.').
+  write('You moved west! Try using \'map\' to see your position now.'),
+  addMove.
+
+/* addMove digunakan untuk menambah banyak move dan mengecek banyak langkah yang telah dilakukan
+   jika banyak langkah telah melebihi batas, yaitu 48 maka hari akan bertambah */
+addMove :-
+  retract(move(PrevMove)),
+  NewMove is PrevMove + 1,
+  ( NewMove =:= 48
+    -> NewMovee = 0,
+    retract(day(PrevDay)),
+    NewDay is PrevDay + 1,
+    assertz(day(NewDay))
+    ; NewMovee = NewMove
+  ),
+  assertz(move(NewMovee)).
