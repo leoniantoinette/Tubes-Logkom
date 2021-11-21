@@ -3,15 +3,18 @@
 :- dynamic(level_fishingrod/1).
 :- dynamic(level_shovel/1).
 
-inventory('Carrot seed', 0).
-inventory('Corn seed', 0).
-inventory('Tomato seed', 0).
-inventory('Carrot', 0).
-inventory('Corn', 0).
-inventory('Tomato', 0).
-inventory('Tuna', 0).
-inventory('Salmon', 0).
-inventory('Trout', 0).
+inventory('carrot seed', 0).
+inventory('corn seed', 0).
+inventory('tomato seed', 0).
+inventory('carrot', 0).
+inventory('corn', 0).
+inventory('tomato', 0).
+inventory('tuna', 0).
+inventory('salmon', 0).
+inventory('trout', 0).
+inventory('egg', 0).
+inventory('milk', 0).
+inventory('bacon', 0).
 level_fishingrod(1).
 level_shovel(1).
 inventory_capacity(2).
@@ -36,7 +39,6 @@ update_inventory(Name, Amount) :-
 	asserta(inventory(Name,New)),
 	retract(inventory(Name,Now)).
 
-
 inventory :-
 	inventory_capacity(Cap),
 	format('Your inventory (~w/100)',[Cap]),nl,
@@ -44,4 +46,4 @@ inventory :-
 	level_shovel(Shovel_level),
 	format('1 Level ~w shovel ~n',[Shovel_level]),
 	format('1 Level ~w fishing rod ~n',[Fishingrod_level]),
-	display_inventory(['Carrot seed','Corn seed','Tomato seed','Carrot','Corn','Tomato','Tuna','Salmon','Trout']).
+	display_inventory(['carrot seed','corn seed','tomato seed','carrot','corn','tomato','tuna','salmon','trout']).

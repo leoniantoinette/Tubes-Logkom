@@ -1,22 +1,22 @@
-ternak('Chicken').
-ternak('Cow').
-ternak('Pig').
+ternak('chicken').
+ternak('cow').
+ternak('pig').
 
-hasil_ternak('Egg').
-hasil_ternak('Milk').
-hasil_ternak('Bacon').
+hasil_ternak('egg').
+hasil_ternak('milk').
+hasil_ternak('bacon').
 
-seed('Carrot seed').
-seed('Corn seed').
-seed('Tomato seed').
+seed('carrot seed').
+seed('corn seed').
+seed('tomato seed').
 
-hasil_tani('Carrot').
-hasil_tani('Corn').
-hasil_tani('Tomato').
+hasil_tani('carrot').
+hasil_tani('corn').
+hasil_tani('tomato').
 
-ikan('Tuna').
-ikan('Salmon').
-ikan('Trout').
+ikan('tuna').
+ikan('salmon').
+ikan('trout').
 
 equipment('shovel').
 equipment('fishing rod').
