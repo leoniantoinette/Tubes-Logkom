@@ -5,11 +5,13 @@
 :- dynamic(in_game/1). % status permainan
 :- dynamic(day/1). % menunjukkan hari ke berapa
 :- dynamic(move/1). % jumlah move dalam satu hari
+:- dynamic(gold/1). % jumlah gold dari pemain
 
 posisi(1,1). %testing -> ntar diimplemen di start
 in_game(true). %testing -> ntar diimplemen di start
 day(1). %testing -> ntar diimplemen di start
 move(0). %testing -> ntar diimplemen di start
+gold(1000).
 
 yes_stmt(yes).
 
@@ -30,3 +32,8 @@ quit :-
   ( yes_stmt(Yes), Ans = Yes
   -> halt
   ; fail ).
+
+
+goalState(d, g) :- day(d), gold(g), d < 365, g >= 20000.
+
+failState(d, g) :- day(d), gold(g), d >= 365, g < 20000.
