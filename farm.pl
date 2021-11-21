@@ -30,24 +30,24 @@ plant :-
     forall((seed(X), inventory(X,Y), Y > 0), format('- ~w ~w ~n', [Y, X])),
     read(In),
     In = 'carrot', 
-    inventory('Carrot seed', W), W > 0, 
+    inventory('carrot seed', W), W > 0, 
     write('You planted a carrot seed.')
-    retract(inventory('Carrot seed', W)),
-    assertz(inventory('Carrot seed', W-1)),
+    retract(inventory('carrot seed', W)),
+    assertz(inventory('carrot seed', W-1)),
     assertz(crop_stat(carrot_plant, X, Y, 0)).
 plant :-
     In = 'corn',
-    inventory('Corn seed', U), U > 0, 
+    inventory('corn seed', U), U > 0, 
     write('You planted a corn seed.')
-    retract(inventory('Corn seed', U)),
-    assertz(inventory('Corn seed', U-1)),
+    retract(inventory('corn seed', U)),
+    assertz(inventory('corn seed', U-1)),
     assertz(crop_stat(corn_plant, X, Y, 0)).
 plant :-
     In = 'tomato',
-    inventory('Tomato seed', V), V > 0, 
+    inventory('tomato seed', V), V > 0, 
     write('You planted a tomato seed.')
-    retract(inventory('Tomato seed', V)),
-    assertz(inventory('Tomato seed', V-1)),
+    retract(inventory('tomato seed', V)),
+    assertz(inventory('tomato seed', V-1)),
     assertz(crop_stat(tomato_plant, X, Y, 0)).
 plant :-
     write('There is no such seed in your inventory.').
@@ -57,19 +57,19 @@ harvest :-
     crop_stat(carrot_plant,X,Y,W), W >= 14,
     write('You harvested carrot.'),
     retract(crop_stat(carrot_plant,X,Y,W)),
-    retract(inventory('Carrot',U)), 
-    assertz(inventory('Carrot',U+1)).
+    retract(inventory('carrot',U)), 
+    assertz(inventory('carrot',U+1)).
 harvest :-
     crop_stat(corn_plant,X,Y,V), V >= 12,
     write('You harvested corn.'),
     retract(crop_stat(corn_plant,X,Y,V)),
-    retract(inventory('Corn',Z)), 
-    assertz(inventory('Corn',Z+1)).
+    retract(inventory('corn',Z)), 
+    assertz(inventory('corn',Z+1)).
 harvest :-
     crop_stat(tomato_plant,X,Y,A), A >= 20,
     write('You harvested tomato.'),
     retract(crop_stat(tomato_plant,X,Y,A)),
-    retract(inventory('Tomato',B)), 
-    assertz(inventory('Tomato',B+1)).
+    retract(inventory('tomato',B)), 
+    assertz(inventory('tomato',B+1)).
 harvest :-
     write('Nothing can be harvested yet.').
