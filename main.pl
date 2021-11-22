@@ -167,6 +167,13 @@ displayJob :-
   !,
   write('Job: Rancher'), nl.
 
-goalState(d, g) :- day(d), gold(g), d < 365, g >= 20000.
+goalState(d, g) :- 
+  day(d), gold(g), 
+  d < 365, g >= 20000,
+  write('Congratulations! You have finally collected 20000 golds!\n').
 
-failState(d, g) :- day(d), gold(g), d >= 365, g < 20000.
+failState(d, g) :- 
+  day(d), gold(g), 
+  d >= 365, g < 20000,
+  write('You have worked hard, but in the end result is all that matters.\n'),
+  write('May God bless you in the future with kind people!\n').
