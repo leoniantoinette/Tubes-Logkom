@@ -83,11 +83,11 @@ checkQuest :- % jika quest telah selesai
   !,
   retract(in_quest(true)),
   assertz(in_quest(false)),
-  retract(exp(CurrentExp)),
+  retract(exp_pemain(CurrentExp)),
   retract(gold(CurrentGold)),
   NewExp is CurrentExp + Exp,      % cek naik level ga
   NewGold is CurrentGold + Gold,
-  assertz(exp(NewExp)),
+  assertz(exp_pemain(NewExp)),
   assertz(gold(NewGold)),
   retract(quest(_,_,_,_,_)).
 

@@ -50,9 +50,3 @@ exit :-
 exit :-
   !,
   write('You can call exit command only if you are at home.').
-
-% check :-
-%   day(Day),
-%   move(Move),
-%   format('~w ~n', [Day]),
-%   format('~w ~n', [Move]).

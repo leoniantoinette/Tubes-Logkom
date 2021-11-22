@@ -1,7 +1,7 @@
 :- dynamic(inventory/2).
 :- dynamic(inventory_capacity/1).
-:- dynamic(level_fishingrod/1).
-:- dynamic(level_shovel/1).
+% :- dynamic(level_fishingrod/1).
+% :- dynamic(level_shovel/1).
 
 inventory('carrot seed', 0).
 inventory('corn seed', 0).
@@ -15,8 +15,8 @@ inventory('trout', 0).
 inventory('egg', 0).
 inventory('milk', 0).
 inventory('bacon', 0).
-level_fishingrod(1).
-level_shovel(1).
+% level_fishingrod(1).
+% level_shovel(1).
 inventory_capacity(2).
 
 display_inventory([]).
