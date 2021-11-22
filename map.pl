@@ -222,4 +222,5 @@ addMove :-
     assertz(day(NewDay))
     ; NewMovee = NewMove
   ),
-  assertz(move(NewMovee)).
+  assertz(move(NewMovee)),
+  updateRanch.

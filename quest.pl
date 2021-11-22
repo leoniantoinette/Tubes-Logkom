@@ -32,7 +32,7 @@ quest :-
   format('- ~w animal product ~n',[Z]).
 quest :-
   in_game(true),
-  write('You can call quest command only if you are at home.').
+  write('You can call quest command only if you are at Q.').
 
 addHarvestToQuest :-
   in_game(true),
@@ -89,6 +89,7 @@ checkQuest :- % jika quest telah selesai
   NewGold is CurrentGold + Gold,
   assertz(exp_pemain(NewExp)),
   assertz(gold(NewGold)),
-  retract(quest(_,_,_,_,_)).
+  retract(quest(_,_,_,_,_)),
+  write('Congratulations! You have done your quest!').
 
 checkQuest :- !.
