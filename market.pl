@@ -1,10 +1,12 @@
-%belom_handle_max_level_equipment
-%belom_handle_input_amount_bukan_harga
-%belom_handle_inventory_kosong
-%belom_handle_inventory_penuh
-%belom_pake_gold
+%TODO:
+%handle_max_level_equipment
+%handle_input_amount_bukan_integer
+%handle_inventory_penuh
+%pake_gold
+%pastiin_game_udah_start
 :- include('inventory.pl').
 :- include('item.pl').
+:- include('map.pl').
 
 harga(50, 'carrot seed').
 harga(50, 'corn seed').
@@ -169,8 +171,13 @@ sell :-
     sell_item(Item).
 	
 market :-
+	atMarketplace,!,
 	write('What do you want to do?'),nl,
 	write('1. Buy'),nl,
 	write('2. Sell'),nl,
 	read(User_input),
 	User_input.
+
+market :-
+	!,
+	write('You can call market command only if you are at market place.').
