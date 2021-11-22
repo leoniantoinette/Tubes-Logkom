@@ -99,7 +99,13 @@ shop(Item) :-
 	read(New_item),
 	shop(New_item).
 
+buy :-
+	in_game(false),!,
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  	fail.
 buy :- 
+	in_game(true),
+	atMarketplace,!,
 	write('What do you want to buy?'),nl,
 	display_buy(['carrot seed','corn seed','tomato seed','chicken','cow','pig'],1),
 	level_shovel(Shovel_now),
@@ -110,6 +116,9 @@ buy :-
 	format('8. Level ~w fishing rod (500 golds) ~n', [Fishingrod_new]),
 	read(Item),
 	shop(Item).
+buy :-
+	!,
+	write('You can call buy command only if you are at market.').
 
 display_sell([]).
 display_sell([Head|Tail]) :-
@@ -162,22 +171,36 @@ sell_item(Item) :-
 	write('What do you want to sell? '),nl,
 	read(New_item),
     sell_item(New_item).
-
+sell :-
+	in_game(false),!,
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  	fail.
 sell :- 
+	in_game(true),
+	atMarketplace,!,
 	write('Here are the items in your inventory'),nl,
 	display_sell(['carrot','corn','tomato','egg','milk','bacon','tuna','salmon','trout']),
 	write('What do you want to sell? '),nl,
 	read(Item),
     sell_item(Item).
-	
+sell :-
+	!,
+	write('You can call sell command only if you are at market.').
+
+
 market :-
+	in_game(false),
+  	!,
+  	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  	fail.
+market :-
+	in_game(true),
 	atMarketplace,!,
 	write('What do you want to do?'),nl,
 	write('1. Buy'),nl,
 	write('2. Sell'),nl,
 	read(User_input),
 	User_input.
-
 market :-
 	!,
 	write('You can call market command only if you are at market place.').
