@@ -1,13 +1,14 @@
 %TODO: 
 %nambahin_exp
+%update quest
 
 :-include('map.pl').
 :-include('inventory.pl').
 
-:- dynamic(level_fishing/1).
-:- dynamic(valid_fish/2).
+%:- dynamic(level_fishing/1).
+%:- dynamic(valid_fish/2).
 
-level_fishing(5).
+%level_fishing(1).
 
 fish_type(0):-
     write('You got tuna!'),nl,

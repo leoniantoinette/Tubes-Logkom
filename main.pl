@@ -175,7 +175,7 @@ help :-
   !,
   write('You haven\'t started the game! Try using \'start.\' to start the game.'),
   fail.
-status :-
+help :-
   in_game(true),
   !,
   write('---------------------------------------------------------------'), nl,

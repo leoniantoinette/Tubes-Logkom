@@ -1,3 +1,5 @@
+%TODO: 
+%trowitem
 :- dynamic(inventory/2).
 :- dynamic(inventory_capacity/1).
 % :- dynamic(level_fishingrod/1).

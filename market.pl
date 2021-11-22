@@ -3,7 +3,7 @@
 %handle_input_amount_bukan_integer
 %handle_inventory_penuh
 %pake_gold
-%pastiin_game_udah_start
+%masukin_time
 :- include('inventory.pl').
 :- include('item.pl').
 :- include('map.pl').
