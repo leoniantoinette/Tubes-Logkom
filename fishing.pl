@@ -56,6 +56,11 @@ fishing(0,Fishing_level) :-
     retract(inventory_capacity(Now)).
 
 fish :-
+    in_game(false),!,
+    write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+    fail.
+fish :-
+    in_game(true),
     atFishingSpot,!,
     level_fishing(Fishing_level),
     level_fishingrod(Fishingrod_level),
