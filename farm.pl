@@ -14,13 +14,13 @@
 % metode untuk melakukan dig/penggalian
 dig :-
     posisi(X,Y),
-    \+pos_air(X,Y), !,
-    \+pos_house(X,Y), !,
-    \+pos_marketplace(X,Y), !,
-    \+pos_quest(X,Y), !,
-    \+pos_ranch(X,Y), !,
+    ((pos_air(X,Y) -> write('You can\'t dig on water!\n'), !);
+    (pos_house(X,Y) -> write('You can\'t dig on house!\n'), !);
+    (pos_marketplace(X,Y) -> write('You can\'t dig on market!\n'), !);
+    (pos_quest(X,Y) -> write('You can\'t dig on quest headquarters\n'), !);
+    (pos_ranch(X,Y) -> write('You can\'t dig on ranch!\n'), !);
     assertz(pos_digged(X,Y)),
-    write('You digged the tile.').
+    write('You digged the tile.')).
 
 plant :-
     posisi(X,Y),
