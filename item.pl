@@ -1,10 +1,12 @@
-ternak('chicken').
-ternak('cow').
-ternak('pig').
+%Format nama,jumlah
+ternak('chicken',0).
+ternak('cow',0).
+ternak('pig',0).
 
-hasil_ternak('egg').
-hasil_ternak('milk').
-hasil_ternak('bacon').
+%Format nama,jumlah hasil produksi,durasi
+hasil_ternak('egg',0,0).
+hasil_ternak('milk',0,0).
+hasil_ternak('bacon',0,0).
 
 seed('carrot seed').
 seed('corn seed').
