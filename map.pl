@@ -19,6 +19,18 @@ pos_air(8,6).
 pos_air(9,3).
 pos_air(9,4).
 pos_air(9,5).
+pos_fishing(6,3). % lokasi untuk fishing
+pos_fishing(6,4).
+pos_fishing(6,5).
+pos_fishing(7,2).
+pos_fishing(7,6).
+pos_fishing(8,1).
+pos_fishing(8,7).
+pos_fishing(9,2).
+pos_fishing(9,6).
+pos_fishing(10,3).
+pos_fishing(10,4).
+pos_fishing(10,5).
 
 map :- in_game(true), !, drawMap.
 map :- !, write('You haven\'t started the game! Try using \'start.\' to start the game.').
@@ -56,6 +68,7 @@ atMarketplace :- pos_marketplace(X_marketplace, Y_marketplace), posisi(X, Y), X 
 atQuest :- pos_quest(X_quest, Y_quest), posisi(X, Y), X =:= X_quest, Y =:= Y_quest.
 atAir :- pos_air(X_air, Y_air), posisi(X, Y), X =:= X_air, Y =:= Y_air.
 atDigged :- pos_digged(X_digged, Y_digged), posisi(X, Y), X =:= X_digged, Y =:= Y_digged.
+atFishingSpot :- pos_fishing(X_fishing, Y_fishing), posisi(X, Y), X =:= X_fishing, Y =:= Y_fishing.
 
 /* w : bergerak ke utara 1 langkah */
 w :-
