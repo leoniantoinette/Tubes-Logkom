@@ -1,6 +1,5 @@
 :- include('item.pl').
 :- include('map.pl').
-:- include ('item.pl').
 :- include ('inventory.pl').
 
 :- dynamic(crop_stat/4) % lokasi dan umur crop
@@ -13,6 +12,12 @@
 
 % metode untuk melakukan dig/penggalian
 dig :-
+    in_game(false),
+    !,
+    write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+    fail.
+dig :-
+    in_game(true),
     posisi(X,Y),
     ((pos_air(X,Y) -> write('You can\'t dig on water!\n'), !);
     (pos_house(X,Y) -> write('You can\'t dig on house!\n'), !);
@@ -22,7 +27,13 @@ dig :-
     assertz(pos_digged(X,Y)),
     write('You digged the tile.')).
 
+plant :- 
+    in_game(false),
+    !,
+    write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+    fail.
 plant :-
+    in_game(true),
     posisi(X,Y),
     \+pos_digged(X,Y), !, write('The tile is not digged yet.').
 plant :-
@@ -52,7 +63,13 @@ plant :-
 plant :-
     write('There is no such seed in your inventory.\n').
 
+harvest :- 
+    in_game(false),
+    !,
+    write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+    fail.
 harvest :-
+    in_game(true),
     posisi(X,Y),
     crop_stat(carrot_plant,X,Y,W), W >= 14,
     write('You harvested carrot.\n'),
