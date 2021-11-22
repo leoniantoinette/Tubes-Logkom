@@ -49,13 +49,13 @@ drawMap :-
   !.
 /* referensi: https://learnxinyminutes.com/docs/prolog/ */
 
-/* fungsi untuk mengetahui apakah posisi (X,Y) berada di lokasi tertentu */
-atHouse(X,Y) :- pos_house(X_house, Y_house), X =:= X_house, Y =:= Y_house.
-atRanch(X,Y) :- pos_ranch(X_ranch, Y_ranch), X =:= X_ranch, Y =:= Y_ranch.
-atMarketplace(X,Y) :- pos_marketplace(X_marketplace, Y_marketplace), X =:= X_marketplace, Y =:= Y_marketplace.
-atQuest(X,Y) :- pos_quest(X_quest, Y_quest), X =:= X_quest, Y =:= Y_quest.
-atAir(X,Y) :- pos_air(X_air, Y_air), X =:= X_air, Y =:= Y_air.
-atDigged(X,Y) :- pos_digged(X_digged, Y_digged), X =:= X_digged, Y =:= Y_digged.
+/* fungsi untuk mengetahui apakah player berada di lokasi tertentu */
+atHouse :- pos_house(X_house, Y_house), posisi(X, Y), X =:= X_house, Y =:= Y_house.
+atRanch :- pos_ranch(X_ranch, Y_ranch), posisi(X, Y), X =:= X_ranch, Y =:= Y_ranch.
+atMarketplace :- pos_marketplace(X_marketplace, Y_marketplace), posisi(X, Y), X =:= X_marketplace, Y =:= Y_marketplace.
+atQuest :- pos_quest(X_quest, Y_quest), posisi(X, Y), X =:= X_quest, Y =:= Y_quest.
+atAir :- pos_air(X_air, Y_air), posisi(X, Y), X =:= X_air, Y =:= Y_air.
+atDigged :- pos_digged(X_digged, Y_digged), posisi(X, Y), X =:= X_digged, Y =:= Y_digged.
 
 /* w : bergerak ke utara 1 langkah */
 w :-
@@ -68,7 +68,7 @@ w :-
   posisi(X,Y),
   Xnew is X - 1,
   Ynew is Y,
-  atAir(Xnew,Ynew),
+  pos_air(Xnew,Ynew),
   !,
   write('You can\'t get into water! Try using \'map.\' to display Map.'),
   fail.
@@ -103,7 +103,7 @@ s :-
   posisi(X,Y),
   Xnew is X + 1,
   Ynew is Y,
-  atAir(Xnew,Ynew),
+  pos_air(Xnew,Ynew),
   !,
   write('You can\'t get into water! Try using \'map.\' to display Map.'),
   fail.
@@ -138,7 +138,7 @@ d :-
   posisi(X,Y),
   Xnew is X,
   Ynew is Y + 1,
-  atAir(Xnew,Ynew),
+  pos_air(Xnew,Ynew),
   !,
   write('You can\'t get into water! Try using \'map.\' to display Map.'),
   fail.
@@ -173,7 +173,7 @@ a :-
   posisi(X,Y),
   Xnew is X,
   Ynew is Y - 1,
-  atAir(Xnew,Ynew),
+  pos_air(Xnew,Ynew),
   !,
   write('You can\'t get into water! Try using \'map.\' to display Map.'),
   fail.

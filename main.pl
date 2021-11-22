@@ -1,17 +1,22 @@
 :- include('map.pl').
 :- include('house.pl').
+:- include('quest.pl').
 
 :- dynamic(posisi/2). % lokasi pemain
 :- dynamic(in_game/1). % status permainan
+:- dynamic(in_quest/1). % menunjukkan apakah memiliki on-going quest
 :- dynamic(day/1). % menunjukkan hari ke berapa
 :- dynamic(move/1). % jumlah move dalam satu hari
 :- dynamic(gold/1). % jumlah gold dari pemain
+:- dynamic(exp/1). % jumlah exp pemain
 
 posisi(1,1). %testing -> ntar diimplemen di start
 in_game(true). %testing -> ntar diimplemen di start
 day(1). %testing -> ntar diimplemen di start
 move(0). %testing -> ntar diimplemen di start
+in_quest(false). %testing -> ntar diimplemen di start
 gold(1000).
+exp(0).
 
 yes_stmt(yes).
 

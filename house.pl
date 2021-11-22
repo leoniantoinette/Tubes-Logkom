@@ -5,8 +5,7 @@ house :-
   fail.
 house :-
   in_game(true),
-  posisi(X,Y),
-  atHouse(X,Y),
+  atHouse,
   !,
   write('Welcome Home!'), nl,
   write('What do you want to do?'), nl,
@@ -26,8 +25,7 @@ sleep :-
   fail.
 sleep :-
   in_game(true),
-  posisi(X,Y),
-  atHouse(X,Y),
+  atHouse,
   !,
   write('You went to sleep...'),
   nl, nl,
@@ -46,8 +44,7 @@ exit :-
   fail.
 exit :-
   in_game(true),
-  posisi(X,Y),
-  atHouse(X,Y),
+  atHouse,
   !,
   write('Have a nice day!').
 exit :-
