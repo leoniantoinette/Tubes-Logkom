@@ -1,6 +1,5 @@
 /* TO DO :
     tambahin exp
-    setelah harvest update quest
     setelah setiap activity tambahin move */
 
 :- include('item.pl').
@@ -96,7 +95,7 @@ harvest :-
 harvest :-
     in_game(true),
     posisi(X,Y),
-    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot, updateFarmExp);
-    (crop_stat(corn_plant,X,Y,_) -> harvestCorn, updateFarmExp);
-    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato, updateFarmExp);
+    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot, updateFarmExp, addHarvestToQuest);
+    (crop_stat(corn_plant,X,Y,_) -> harvestCorn, updateFarmExp, addHarvestToQuest);
+    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato, updateFarmExp, addHarvestToQuest);
     (write('There is no plant here.'))).
