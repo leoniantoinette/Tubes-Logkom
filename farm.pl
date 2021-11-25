@@ -1,6 +1,5 @@
 /* TO DO :
-    tambahin exp
-    setelah setiap activity tambahin move */
+    tambahin exp */
 
 :- include('item.pl').
 :- include('map.pl').
@@ -34,7 +33,8 @@ dig :-
     (pos_ranch(X,Y) -> write('You can\'t dig on ranch!\n'), !);
     (assertz(pos_digged(X,Y)),
     write('You digged the tile.\n'),
-    updateFarmExp)).
+    updateFarmExp,
+    addMove)).
 
 plantCarrot :-
     inventory('carrot seed', A),
@@ -64,9 +64,9 @@ plant :-
     write('You have : \n'),
     forall((seed(X), inventory(X,Y)), format('- ~w ~w ~n', [Y, X])),
     read(In),
-    ((In == 'carrot' -> plantCarrot, updateFarmExp);
-    (In == 'corn' -> plantCorn, updateFarmExp);
-    (In == 'tomato' -> plantTomato, updateFarmExp);
+    ((In == 'carrot' -> plantCarrot, updateFarmExp, addMove);
+    (In == 'corn' -> plantCorn, updateFarmExp, addMove);
+    (In == 'tomato' -> plantTomato, updateFarmExp, addMove);
     (write('There is no such seed in your inventory.\n'))).
 
 harvestCarrot :-
@@ -95,7 +95,7 @@ harvest :-
 harvest :-
     in_game(true),
     posisi(X,Y),
-    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot, updateFarmExp, addHarvestToQuest);
-    (crop_stat(corn_plant,X,Y,_) -> harvestCorn, updateFarmExp, addHarvestToQuest);
-    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato, updateFarmExp, addHarvestToQuest);
+    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot, updateFarmExp, addHarvestToQuest, addMove);
+    (crop_stat(corn_plant,X,Y,_) -> harvestCorn, updateFarmExp, addHarvestToQuest, addMove);
+    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato, updateFarmExp, addHarvestToQuest, addMove);
     (write('There is no plant here.'))).
