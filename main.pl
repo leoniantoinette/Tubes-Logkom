@@ -4,6 +4,7 @@
 :- include('inventory.pl').
 :- include('market.pl').
 :- include('fishing.pl').
+:- include('farm.pl').
 
 :- dynamic(posisi/2). % lokasi pemain
 :- dynamic(in_game/1). % status permainan
