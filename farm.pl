@@ -1,6 +1,5 @@
 /* TO DO :
     tambahin exp
-    panggil update inventory aja
     setelah harvest update quest
     setelah setiap activity tambahin move */
 
@@ -15,6 +14,11 @@
     corn_plant
     tomato_plant */
 
+updateFarmExp :-
+    retract(exp_farming(A)),
+    ((farmer(true) -> (A1 is A + 15, asserta(exp_farming(A1))));
+    (A1 is A + 10, asserta(exp_farming(A+10)))).
+
 % metode untuk melakukan dig/penggalian
 dig :-
     in_game(false),
@@ -27,10 +31,11 @@ dig :-
     ((pos_air(X,Y) -> write('You can\'t dig on water!\n'), !);
     (pos_house(X,Y) -> write('You can\'t dig on house!\n'), !);
     (pos_marketplace(X,Y) -> write('You can\'t dig on market!\n'), !);
-    (pos_quest(X,Y) -> write('You can\'t dig on quest headquarters\n'), !);
+    (pos_quest(X,Y) -> write('You can\'t dig on quest headquarters!\n'), !);
     (pos_ranch(X,Y) -> write('You can\'t dig on ranch!\n'), !);
-    assertz(pos_digged(X,Y)),
-    write('You digged the tile.')).
+    (assertz(pos_digged(X,Y)),
+    write('You digged the tile.\n'),
+    updateFarmExp)).
 
 plantCarrot :-
     inventory('carrot seed', A),
@@ -60,9 +65,9 @@ plant :-
     write('You have : \n'),
     forall((seed(X), inventory(X,Y)), format('- ~w ~w ~n', [Y, X])),
     read(In),
-    ((In == 'carrot' -> plantCarrot);
-    (In == 'corn' -> plantCorn);
-    (In == 'tomato' -> plantTomato);
+    ((In == 'carrot' -> plantCarrot, updateFarmExp);
+    (In == 'corn' -> plantCorn, updateFarmExp);
+    (In == 'tomato' -> plantTomato, updateFarmExp);
     (write('There is no such seed in your inventory.\n'))).
 
 harvestCarrot :-
@@ -91,7 +96,7 @@ harvest :-
 harvest :-
     in_game(true),
     posisi(X,Y),
-    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot);
-    (crop_stat(corn_plant,X,Y,_) -> harvestCorn);
-    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato);
+    ((crop_stat(carrot_plant,X,Y,_) -> harvestCarrot, updateFarmExp);
+    (crop_stat(corn_plant,X,Y,_) -> harvestCorn, updateFarmExp);
+    (crop_stat(tomato_plant,X,Y,_) -> harvestTomato, updateFarmExp);
     (write('There is no plant here.'))).
