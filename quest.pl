@@ -1,5 +1,3 @@
-:- include('map.pl').
-
 :- dynamic(quest/5). % (X,Y,Z,Exp,Gold) : hasil panen, ikan, ternak yg harus dikumpulkan, exp, gold yang diperoleh
 
 quest :-

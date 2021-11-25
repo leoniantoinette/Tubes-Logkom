@@ -4,203 +4,136 @@
 %handle_inventory_penuh
 %pake_gold
 %masukin_time
-:- include('inventory.pl').
-:- include('item.pl').
-:- include('map.pl').
 
-harga(50, 'carrot seed').
-harga(50, 'corn seed').
-harga(50, 'tomato seed').
-harga(500, 'cow').
-harga(200, 'chicken').
-harga(1000, 'pig').
-harga(300, 'shovel').
-harga(500, 'fishing rod').
-harga(75,'carrot').
-harga(70,'corn').
-harga(100,'tomato').
-harga(200,'salmon').
-harga(150,'tuna').
-harga(250,'trout').
-harga(120,'milk').
-harga(100,'egg').
-harga(220,'bacon').
+checkLevelEquipment(Name):-
+	inventory(_,Name,_,_,_,_,_,Level),
+	(   Level >= 3 ->
+	    write('You can`t level up your equipment anymore because it`s already reached its maximum!')
+	;   addInventory(Name,1),
+	    write('Yeay, your shovel equipment level has increased~'),nl
+	).
 
-item_name(1, 'carrot seed').
-item_name(2, 'corn seed').
-item_name(3, 'tomato seed').
-item_name(4, 'chicken').
-item_name(5, 'cow').
-item_name(6, 'pig').
-item_name(7, 'shovel').
-item_name(8, 'fishing rod').
-
-display_buy([],7).
-display_buy([Head|Tail],Num) :-
-	format('~w. ',[Num]),
-  	write(Head),
-	harga(X,Head),
-	format(' (~w golds)',[X]),nl,
-	New is Num+1,
-  	display_buy(Tail,New).	
-
-item_type(X) :- 
-	ternak(X), !,
-	write('How many do you want to buy?'),nl,
-	read(Amount),
-	format('You have bought ~w ~w.',[Amount,X]), nl,
-	harga(Y,X),
-	Total is Y*Amount ,
-	format('You are charged ~w golds ~n.',[Total]).
-item_type(X) :-
-	seed(X),!,
-	write('How many do you want to buy?'),nl,
-	read(Amount),
-	format('You have bought ~w ~w.',[Amount,X]), nl,
-	harga(Y,X),
-	Total is Y*Amount ,
-	format('You are charged ~w golds.~n',[Total]),
-	update_inventory(X,Amount).
-item_type(X) :-
-	equipment(X),
-	X \= 'fishing rod',
-	level_shovel(Now),
-	New is Now+1,
-	format('You have bought Level ~w shovel.',[New]), nl,
-	harga(Y,X),
-	format('You are charged ~w golds. ~n',[Y]),
-	asserta(level_shovel(New)),
-	retract(level_shovel(Now)).
-item_type(X) :-
-	equipment(X),
-	X \= 'shovel',
-	level_fishingrod(Now),
-	New is Now+1,
-	format('You have bought Level ~w fishing rod.',[New]), nl,
-	harga(Y,X),
-	format('You are charged ~w golds. ~n',[Y]),
-	asserta(level_fishingrod(New)),
-	retract(level_fishingrod(Now)).
-
-shop('exitShop') :-
+shop('exitShop',_) :-
 	write('Thanks for coming.'),!.
 
-shop(Item) :-
-	item_name(Item,Name),
-	item_type(Name),nl,
-	write('What do you want to buy?'),nl,
-	display_buy(['carrot seed','corn seed','tomato seed','chicken','cow','pig'],1),
-	level_shovel(Shovel_now),
-	Shovel_new is Shovel_now +1,
-	level_fishingrod(Fishingrod_now),
-	Fishingrod_new is Fishingrod_now + 1,
-	format('7. Level ~w shovel (300 golds) ~n', [Shovel_new]),
-	format('8. Level ~w fishing rod (500 golds) ~n', [Fishingrod_new]),
-	read(New_item),
-	shop(New_item).
+shop(Item,bought) :-
+	(   (Item == 7 ; Item == 8) ->
+	    (	Item == 7 ->
+		checkLevelEquipment('shovel')
+	    ;   checkLevelEquipment('fishing rod')
+	    )
+	;   (Item == 1 ; Item == 2 ; Item == 3 ; Item == 4 ; Item == 5 ; Item == 6) ->
+            write('How many do you want to buy?'),nl,
+	    read(Amount),
+	    (	Item == 1 ->
+	        addInventory('carrot seed',Amount),
+                format('You have bought ~w carrot seed.',[Amount]),nl
+	    ;	Item == 2 ->
+	        addInventory('corn seed',Amount),
+                format('You have bought ~w corn seed.',[Amount]),nl
+	    ;	Item == 3 ->
+	        addInventory('tomato seed',Amount),
+                format('You have bought ~w tomato seed.',[Amount]),nl
+	    ;	Item == 4 ->
+	        addTernakStatus('cow',Amount),
+                format('You have bought ~w cow.',[Amount]),nl,
+	        write('Your cow is already on the ranch'),nl
+	    ;	Item == 5 ->
+	        addTernakStatus('chicken',Amount),
+                format('You have bought ~w chicken.',[Amount]),nl,
+		write('Your chicken is already on the ranch'),nl
+	    ;   addTernakStatus('pig',Amount),
+                format('You have bought ~w pig.',[Amount]),nl,
+		write('Your pig is already on the ranch'),nl
+            )
+        ;   write('Your input is wrong! Provide input with numbers based on the numbers listed on the market! or input exitShop if you want to exit'),nl
+	),
+	buy.
+shop(Item,forsale) :-
+	findall(Name, inventory(_,Name,_,_,_,_,_), ListName),
+	(   isNameInventory(Item,ListName) ->
+	    inventory(_,Item,_,_,Price,_,_,Count),
+	    write('How many do you want to sell?'),nl,
+	    read(Amount),
+	    (	Amount < Count ->
+	        reducedInventory(Item,Count),
+	        format('You sold ~w ~w.', [Amount,Item]),nl,
+		PriceTotal is Price*Amount,
+		format('You received ~w golds.', [PriceTotal]),nl
+	    ;	format('You don\'t have enough ~w to sell.',[Item]),nl
+	    )
+	;   write('Your input is wrong! Provide input with item names based on items listed on the market! or enter exitShop if you want to exit'),nl
+	),
+	sell.
 
 buy :-
 	in_game(false),!,
 	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
-  	fail.
-buy :- 
+	fail.
+buy :-
 	in_game(true),
 	atMarketplace,!,
 	write('What do you want to buy?'),nl,
-	display_buy(['carrot seed','corn seed','tomato seed','chicken','cow','pig'],1),
-	level_shovel(Shovel_now),
-	Shovel_new is Shovel_now +1,
-	level_fishingrod(Fishingrod_now),
-	Fishingrod_new is Fishingrod_now + 1,
-	format('7. Level ~w shovel (300 golds) ~n', [Shovel_new]),
-	format('8. Level ~w fishing rod (500 golds) ~n', [Fishingrod_new]),
+	write('1. Carrot seed (50 golds)'),nl,
+	write('2. Corn seed (50 golds)'),nl,
+	write('3. Tomato seed (50 golds)'),nl,
+	write('4. Cow (500 golds)'),nl,
+	write('5. Chicken (200 golds)'),nl,
+	write('6. Pig (1000 golds)'),nl,
+	write('7. Increase your shovel level (300 golds/level)'),nl,
+	write('8. Increase your fishing rod level (500 golds/level)'),nl,
+	write('> '),
 	read(Item),
-	shop(Item).
+	shop(Item,bought).
 buy :-
 	!,
 	write('You can call buy command only if you are at market.').
 
-display_sell([]).
-display_sell([Head|Tail]) :-
-    inventory(Head,0),
-    display_sell(Tail).
-display_sell([Head|Tail]) :-
-	\+ inventory(Head,0),
-	inventory(Head,Amount),
-	format('- ~w ~w ~n',[Amount,Head]),
-	display_sell(Tail).
+makeListSell(ListName, ListCount):-
+    findall(Name, inventory(_,Name,_,_,_,true,sell,_), ListName),
+    findall(Count, inventory(_,_,_,_,_,true,sell,Count), ListCount).
 
-validity_amount(Item, Amount):-
-    inventory(Item,Valid_amount),
-    Amount > Valid_amount,
-    format('You don\'t have enough ~w to sell. ~n',[Item]),nl,!.
-validity_amount(Item,Amount) :-
-    inventory(Item,Valid_amount),
-    Amount =< Valid_amount,
-    format('You sold ~w ~w.~n',[Amount,Item]),
-    harga(Price,Item),
-    Total is Amount*Price,
-    format('You received ~w golds.~n',[Total]),nl,
-    New_amount is Valid_amount - Amount,
-    asserta(inventory(Item,New_amount)),
-    retract(inventory(Item,Valid_amount)).
+displayListSell([], []).
+displayListSell([A|W], [B|X]):-
+	write('-   '), write(B), write(' '), write(A), nl,
+        displayListSell(W,X).
 
-validity_Item(Item) :-
-    hasil_tani(Item),
-    write('How many do you want to sell?'),nl,
-	read(Amount),
-    validity_amount(Item,Amount),!.
-validity_Item(Item) :-
-    hasil_ternak(Item),
-    write('How many do you want to sell?'),nl,
-	read(Amount),
-    validity_amount(Item,Amount),!.
-validity_Item(Item) :-
-    ikan(Item),
-    write('How many do you want to sell?'),nl,
-	read(Amount),
-    validity_amount(Item,Amount),!.
-validity_Item(Item) :-
-    write('Input invalid.'),nl,nl.
-
-sell_item('exitShop'):- !.
-sell_item(Item) :-
-    validity_Item(Item),
-    write('Here are the items in your inventory'),nl,
-	display_sell(['carrot','corn','tomato','egg','milk','bacon','tuna','salmon','trout']),
-	write('What do you want to sell? '),nl,
-	read(New_item),
-    sell_item(New_item).
 sell :-
 	in_game(false),!,
 	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
-  	fail.
-sell :- 
+	fail.
+sell :-
 	in_game(true),
 	atMarketplace,!,
 	write('Here are the items in your inventory'),nl,
-	display_sell(['carrot','corn','tomato','egg','milk','bacon','tuna','salmon','trout']),
+	makeListSell(ListName, ListCount),
+	displayListSell(ListName, ListCount),
 	write('What do you want to sell? '),nl,
 	read(Item),
-    sell_item(Item).
+        shop(Item,forsale).
 sell :-
 	!,
 	write('You can call sell command only if you are at market.').
 
-
 market :-
 	in_game(false),
-  	!,
-  	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
-  	fail.
+	!,
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+	fail.
 market :-
 	in_game(true),
 	atMarketplace,!,
 	write('What do you want to do?'),nl,
-	write('1. Buy'),nl,
-	write('2. Sell'),nl,
-	read(User_input),
-	User_input.
+	write('1. buy'),nl,
+	write('2. sell'),nl,
+	write('> '),
+        read(User_input),
+	(   User_input =  buy ->
+            buy
+        ;   User_input = sell ->
+            sell
+        ;   write('Your Input is Wrong! You are forced out of the market.')
+        ).
 market :-
 	!,
 	write('You can call market command only if you are at market place.').

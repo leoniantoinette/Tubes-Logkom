@@ -1,108 +1,135 @@
-:- include('inventory.pl')
+:- dynamic(ternakStatus/4).
+/* Format berupa : ternakStatus(Name, Count, Processing Time , Deadline) */
 
-:- dynamic(cow/1).
-:- dynamic(chicken/1).
-:- dynamic(pig/1).
-:- dynamic(t_cow/2). % menunjukkan waktu tunggu cow dan waktu tersisa untuk cow menghasilkan milk
-:- dynamic(t_chicken/2).
-:- dynamic(t_pig/2).
+% TODO
+% blm tambah exp
 
-t_cow(12,12).
-t_chicken(11,11).
-t_pig(17,17).
+addTernakStatus(Name, Addition):-
+  (   Name = 'cow' ->
+      assertz(ternakStatus(Name,Addition,0,48))
+  ;   Name = 'chicken' ->
+      assertz(ternakStatus(Name,Addition,0,44))
+  ;   Name = 'pig' ->
+      assertz(ternakStatus(Name,Addition,0,68))
+  ).
+
+makeListRanch(ListName, ListCount):-
+    findall(Name, ternakStatus(Name,_,_,_), ListName),
+    findall(Count, ternakStatus(_,Count,_,_), ListCount).
+
+updateTernakStatus([],[],_,_):- !.
+updateTernakStatus([A|W], [B|X], StatusProcess, StatusLevel):-
+  (   StatusProcess == true ->
+      ternakStatus(A,B,TProcess,TDeadline),
+      retract(ternakStatus(A,B,TProcess,TDeadline)),
+      TProcessNew is TProcess+1,
+      assertz(ternakStatus(A,B,TProcessNew,TDeadline)),
+      updateTernakStatus(W,X,StatusProcess, StatusLevel)
+  ;   StatusLevel == true ->
+      ternakStatus(A,B,TProcess,TDeadline),
+      retract(ternakStatus(A,B,TProcess,TDeadline)),
+      TDeadlineNew is TDeadline-4,
+      assertz(ternakStatus(A,B,TProcess,TDeadlineNew)),
+      updateTernakStatus(W,X,StatusProcess, StatusLevel)
+  ).
+
+totalOnTheRanch([], [], 0, 0, 0).
+totalOnTheRanch([A|W], [B|X], CountCow, CountChicken, CountPig):-
+	(   A == 'cow' ->
+            totalOnTheRanch(W,X, CountCowCurrent, CountChicken, CountPig),
+            CountCow is CountCowCurrent+B
+        ;   A == 'chicken' ->
+            totalOnTheRanch(W,X, CountCow, CountChickenCurrent, CountPig),
+            CountChicken is CountChickenCurrent+B
+        ;   A == 'pig' ->
+            totalOnTheRanch(W,X, CountCow, CountChicken, CountPigCurrent),
+            CountPig is CountPigCurrent+B
+        ).
+
+makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline) :-
+    findall(Name, ternakStatus(Name,_,_,_), ListName),
+    findall(TProcess, ternakStatus(_,_,TProcess,_), ListTProcess),
+    findall(TDeadline, ternakStatus(_,_,_,TDeadline), ListTDeadline).
+
+checkWhoCanBeTaken([], [], [], 0, _).
+checkWhoCanBeTaken([A|W], [B|X], [C|Y], Count, Name):-
+    (   A == Name ->
+        (   B > C ->
+            retract(ternakStatus(A,Amount,B,C)),
+            CountNew is Count+Amount,
+            checkWhoCanBeTaken(W,X,Y,CountNew,Name)
+        ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
+        )
+    ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
+    ).
 
 ranch :-
   in_game(false),
-  !, 
+  !,
   write('You haven\'t started the game! Try using \'start.\' to start the game.').
 ranch :-
   in_game(true),
   atRanch,
   write('Welcome to the ranch! You have:'), nl,
-  cow(Ncow), chicken(Nchicken), pig(Npig),
-  format('- ~w cow ~n',[Ncow]),
-  format('- ~w chicken ~n',[Nchicken]),
-  format('- ~w pig ~n',[Npig]),
+  makeListRanch(ListName, ListCount),
+  totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
+  (   CountCow \= 0 ->
+      format('- ~w Cow ~n',[CountCow])
+  ;   nl
+  ),
+  (   CountChicken \= 0 ->
+      format('- ~w Chicken ~n',[CountChicken])
+  ;   nl
+  ),
+  (   CountPig \= 0 ->
+      format('- ~w Pig ~n',[CountPig])
+  ;   nl
+  ),
   write('What do you want to do?').
 ranch :-
   in_game(true),
   !,
   write('You can call quest command only if you are at ranch.').
 
-% blm tambah exp
-cow :- 
-  t_cow(T1,T2),
-  T2 =:= 0,
-  !,
-  cow(Ncow),
-  format('Your cow has produced ~w milks. ~n',[Ncow]),
-  format('You got ~w milks! ~n',[Ncow]),
-  update_inventory('milk', Ncow).
 cow :-
-  !,
-  write('Your cow hasn\'t produced any milk.'), nl,
-  write('Please check again later.').
+  makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
+  Count is 0,
+  checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'cow'),
+  (   Count == 0 ->
+      write('Your cow hasn\'t produced any milk.'), nl,
+      write('Please check again later.')
+  ;   format('Your cow has produced ~w milks. ~n',[Count]),
+      format('You got ~w milks! ~n',[Count])
+  ).
 
 chicken :-
-  t_chicken(T1,T2),
-  T2 =:= 0,
-  !,
-  chicken(Nchicken),
-  format('Your chicken has produced ~w eggs. ~n',[Nchicken]),
-  format('You got ~w eggs! ~n',[Nchicken]),
-  update_inventory('egg', Nchicken).
-chicken :-
-  !,
-  write('Your chicken hasn\'t produced any egg.'), nl,
-  write('Please check again later.').
+  makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
+  Count is 0,
+  checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'chicken'),
+  (   Count == 0 ->
+      write('Your cow hasn\'t produced any egg.'), nl,
+      write('Please check again later.')
+  ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
+      format('You got ~w eggs! ~n',[Count])
+  ).
 
 pig :-
-  t_pig(T1,T2),
-  T2 =:= 0,
-  !,
-  pig(Npig),
-  format('Your pig has produced ~w bacons. ~n',[Npig]),
-  format('You got ~w bacons! ~n',[Npig]),
-  update_inventory('bacon', Ncow).
-pig :-
-  !,
-  write('Your pig hasn\'t produced any bacon.'), nl,
-  write('Please check again later.').
+  makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
+  Count is 0,
+  checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'pig'),
+  (   Count == 0 ->
+      write('Your cow hasn\'t produced any bacon.'), nl,
+      write('Please check again later.')
+  ;   format('Your chicken has produced ~w bacons. ~n',[Count]),
+      format('You got ~w bacons! ~n',[Count])
+  ).
 
-updateRanch :-
-  updateCow,
-  updateChicken,
-  updatePig.
+/* Setiap melakukan aktivitas */
+updateProcessRanch :-
+  makeListRanch(ListName, ListCount),
+  updateTernakStatus(ListName, ListCount, true, false),!.
 
-updateCow :-
-  cow(Ncow),
-  Ncow > 0,
-  !,
-  retract(t_cow(T1,T2)),
-  ( T2 > 0
-  -> T2new is T2 - 1
-  ; T2new = T2),
-  assertz(t_cow(T1,T2new)).
-updateCow :- !.
-
-updateChicken :-
-  chicken(Nchicken),
-  Nchicken > 0,
-  !,
-  retract(t_chicken(T1,T2)),
-  ( T2 > 0
-  -> T2new is T2 - 1
-  ; T2new = T2),
-  assertz(t_chicken(T1,T2new)).
-updateChicken :- !.
-
-updatePig :-
-  pig(Npig),
-  Npig > 0,
-  !,
-  retract(t_pig(T1,T2)),
-  ( T2 > 0
-  -> T2new is T2 - 1
-  ; T2new = T2),
-  assertz(t_pig(T1,T2new)).
-updatePig :- !.
+/* Setiap kenaikan level fishing */
+updateLevelRanch :-
+  makeListRanch(ListName, ListCount),
+  updateTernakStatus(ListName, ListCount, false, true),!.

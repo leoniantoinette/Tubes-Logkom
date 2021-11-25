@@ -1,11 +1,3 @@
-:- include('map.pl').
-:- include('house.pl').
-:- include('quest.pl').
-:- include('inventory.pl').
-:- include('market.pl').
-:- include('fishing.pl').
-:- include('farm.pl').
-
 :- dynamic(posisi/2). % lokasi pemain
 :- dynamic(in_game/1). % status permainan
 :- dynamic(in_quest/1). % menunjukkan apakah memiliki on-going quest
@@ -23,8 +15,17 @@
 :- dynamic(level_farming/1).
 :- dynamic(level_fishing/1).
 :- dynamic(level_ranching/1).
-:- dynamic(level_fishingrod/1).
-:- dynamic(level_shovel/1).
+
+:- include('item.pl').
+:- include('map.pl').
+:- include('inventory.pl').
+:- include('farm.pl').
+:- include('fishing.pl').
+:- include('ranch.pl').
+:- include('market.pl').
+:- include('house.pl').
+:- include('quest.pl').
+
 
 in_game(false).
 
@@ -81,8 +82,8 @@ initialize :-
   assertz(level_farming(1)),
   assertz(level_fishing(1)),
   assertz(level_ranching(1)),
-  assertz(level_fishingrod(1)),
-  assertz(level_shovel(1)).
+  addInventory('shovel',1),
+  addInventory('fishing rod',1).
 
 /* chooseJob : untuk memilih job */
 chooseJob(Job_num) :-
@@ -207,19 +208,13 @@ help :-
   write('| 4. pig  : untuk mengambil bacon                              |'), nl,
   write('---------------------------------------------------------------').
 
-goalState :- 
-  day(d), gold(g), 
+goalState(d, g) :-
+  day(d), gold(g),
   d < 365, g >= 20000,
   write('Congratulations! You have finally collected 20000 golds!\n').
 
-failState :- 
-  day(d), gold(g), 
+failState(d, g) :-
+  day(d), gold(g),
   d >= 365, g < 20000,
   write('You have worked hard, but in the end result is all that matters.\n'),
   write('May God bless you in the future with kind people!\n').
-
-addMove :-
-  retract(move(M)),
-  M_new is M + 1,
-  asserta(move(M_new)),
-  updateCropAge.

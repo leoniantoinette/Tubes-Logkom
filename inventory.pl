@@ -1,51 +1,123 @@
-%TODO: 
-%trowitem
-:- dynamic(inventory/2).
-:- dynamic(inventory_capacity/1).
-% :- dynamic(level_fishingrod/1).
-% :- dynamic(level_shovel/1).
+:- dynamic(inventory/8).
+/* Format Berupa item(ID, Name, Type, Role, Price, isInventory, _)
+ * UNTUK TYPE = BARANG, LIST KE-8 (_) BERUPA COUNT
+ * UNTUK TYPE = EQUIPMENT, LIST KE-8(_) BERUPA LEVEL
+ */
 
-inventory('carrot seed', 0).
-inventory('corn seed', 0).
-inventory('tomato seed', 0).
-inventory('carrot', 0).
-inventory('corn', 0).
-inventory('tomato', 0).
-inventory('tuna', 0).
-inventory('salmon', 0).
-inventory('trout', 0).
-inventory('egg', 0).
-inventory('milk', 0).
-inventory('bacon', 0).
-% level_fishingrod(1).
-% level_shovel(1).
-inventory_capacity(2).
+totalInventoryWithoutEquipment(Sum):-
+    findall(Count, inventory(_,_,barang,_,_,_,_,Count), List),
+    sum_list(List,Sum).
 
-display_inventory([]).
-display_inventory([Head|Tail]) :- 
-	inventory(Head,0),
-	display_inventory(Tail).
-display_inventory([Head|Tail]) :-
-	\+ inventory(Head,0),
-	inventory(Head,Amount),
-	format('~w ~w ~n',[Amount, Head]),
-	display_inventory(Tail).
+totalInventory(Total):-
+    totalInventoryWithoutEquipment(Sum),
+    Total is Sum + 2.
 
-update_inventory(Name, Amount) :-
-	inventory_capacity(Cap),
-	Inventory_cap_now is Cap + Amount,
-	asserta(inventory_capacity(Inventory_cap_now)),
-	retract(inventory_capacity(Cap)),
-	inventory(Name, Now),
-	New is Now + Amount,
-	asserta(inventory(Name,New)),
-	retract(inventory(Name,Now)).
+isInventoryPenuh:-
+    totalInventory(Total),
+    Total == 100.
 
-inventory :-
-	inventory_capacity(Cap),
-	format('Your inventory (~w/100)',[Cap]),nl,
-	level_fishingrod(Fishingrod_level),
-	level_shovel(Shovel_level),
-	format('1 Level ~w shovel ~n',[Shovel_level]),
-	format('1 Level ~w fishing rod ~n',[Fishingrod_level]),
-	display_inventory(['carrot seed','corn seed','tomato seed','carrot','corn','tomato','tuna','salmon','trout']).
+makeListInventory(ListName, ListType, ListCount):-
+    findall(Name, inventory(_,Name,_,_,_,true,_,_), ListName),
+    findall(Type, inventory(_,_,Type,_,_,true,_,_), ListType),
+    findall(Count, inventory(_,_,_,_,_,true,_,Count), ListCount).
+
+writeInventory([], [], []).
+writeInventory([A|W], [B|X], [C|Y]):-
+    (   (B == equipment) ->
+        write('1 Level '), write(C), write(' '), write(A), nl,
+        writeInventory(W,X,Y)
+    ;   (B == barang) ->
+        write(C), write(' '), write(A), nl,
+        writeInventory(W,X,Y)
+    ;   writeInventory(W,X,Y)
+    ).
+
+isMemberInventory(ID,[ID|_]).
+isMemberInventory(ID,[_|T]):-
+    isMemberInventory(ID,T).
+
+isNameInventory(NAME,[NAME|_]).
+isNameInventory(NAME,[_|T]):-
+    isNameInventory(NAME,T).
+
+addInventory(_,_):-
+    totalInventory(Total),
+    Total >= 100,
+    write('Your inventory is full!'),
+    !,fail.
+addInventory(Name,Addition):-
+    item(ID,Name,_,_,_,_,_),
+    findall(Id, inventory(Id,_,_,_,_,_,_,_), ListId),
+    (   isMemberInventory(ID,ListId) ->
+        item(ID,Name,_,_,_,_,_),
+        retract(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,Count)),
+        UpdateCount is Count+Addition,
+        assertz(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,UpdateCount))
+    ;   item(ID,Name,Type,Role,Price,IsInventory,StatusMarket),
+        Count is Addition,
+        assertz(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,Count))
+     ).
+
+reduceInventory(Name,_):-
+    item(ID,Name,_,_,_,_,_),
+    findall(Id, inventory(Id,_,_,_,_,_,_,_), ListId),
+    \+isMemberInventory(ID,ListId),
+    write('There is no such item in your inventory!'), nl,
+    !,fail.
+reduceInventory(Name,Reduction):-
+    inventory(ID,Name,_,_,_,_,_,Count),
+    NewCount is Count-Reduction,
+    (   NewCount =:= 0 ->
+        retract(inventory(ID,_,_,_,_,_,_,_))
+    ;   retract(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,Count)),
+        assertz(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,NewCount))
+    ).
+
+getCountBarang(NAME,Count):-
+    findall(Name, inventory(_,Name,_,_,_,_,_,_), ListName),
+    (   isNameInventory(NAME,ListName) ->
+        inventory(_,NAME,_,_,_,_,_,COUNT),
+        Count is COUNT
+    ;   write('There is no such name in your inventory!')
+    ).
+
+inventory:-
+    totalInventory(Sum),
+    format('Your inventory: (~w/100)', [Sum]), nl,
+    makeListInventory(Name, ListType, Count),
+    writeInventory(Name, ListType, Count).
+
+throwItem:-
+    write('Your inventory'), nl,
+    makeListInventory(Name, ListType, Count),
+    writeInventory(Name, ListType, Count), nl,
+    write('What do you want to throw?'), nl,
+    write('> '),
+    read(Name),
+    (   Name == 'shovel' ; Name == 'fishing rod' ->
+        write('You can`t throw it away because it`s your equipment!')
+    ;   getCountBarang(Name,Count),
+        format('You have ~w ~w. How many do you want to throw?', [Count,Name]), nl,
+        write('> '),
+        read(Reduce),
+        (   (Reduce < Count) ->
+            reduceInventory(Name,Reduce),
+            format('You threw away ~w ~w.', [Count,Name]), nl
+         ;  format('You don`t have enough ~w. Cancelling...', [Name]), nl
+        )
+    ).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

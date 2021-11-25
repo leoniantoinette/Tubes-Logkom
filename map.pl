@@ -223,4 +223,4 @@ addMove :-
     ; NewMovee = NewMove
   ),
   assertz(move(NewMovee)),
-  updateRanch.
+  updateProcessRanch.

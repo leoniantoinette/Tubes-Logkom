@@ -1,38 +1,26 @@
-%TODO: 
+%TODO:
 %nambahin_exp
 %update quest
 
-:-include('map.pl').
-:-include('inventory.pl').
-
-%:- dynamic(level_fishing/1).
-%:- dynamic(valid_fish/2).
-
-%level_fishing(1).
+/* Mendapatkan level equipment Fishing Rod */
+getLevelFishingRod(LevelFishingRod):-
+    inventory(2,_,_,_,_,_,_,Level),
+    LevelFishingRod is Level.
 
 fish_type(0):-
     write('You got tuna!'),nl,
-    inventory('tuna',Now),
-    New is Now + 1,
-    asserta(inventory('tuna',New)),
-    retract(inventory('tuna',Now)).
+    addInventory('tuna',1).
 fish_type(1):-
     write('You got salmon!'),nl,
-    inventory('salmon',Now),
-    New is Now + 1,
-    asserta(inventory('salmon',New)),
-    retract(inventory('salmon',Now)).
+    addInventory('salmon',1).
 fish_type(2) :-
     write('You got trout!'),nl,
-    inventory('trout',Now),
-    New is Now + 1,
-    asserta(inventory('trout',New)),
-    retract(inventory('trout',Now)).
+    addInventory('trout',1).
 
 get_fish(Level_fishing) :-
     Level_fishing >= 1,
     Level_fishing =< 2,
-    write('You got tuna!'),nl.
+    fish_type(0).
 get_fish(Level_fishing) :-
     Level_fishing >=3,
     Level_fishing =<4,
@@ -44,17 +32,13 @@ get_fish(5) :-
     Fish is mod(Number,3),
     fish_type(Fish).
 
-fishing(X,Fishing_level) :-
+fishing(X,_) :-
     X \= 0,
     write('You didn\'t get anything!'),nl,
     write('You gained 5 fishing exp!'),nl,!.
 fishing(0,Fishing_level) :-
     get_fish(Fishing_level),
-    write('You gained 10 fishing exp!'),nl,
-    inventory_capacity(Now),
-    New is Now + 1,
-    asserta(inventory_capacity(New)),
-    retract(inventory_capacity(Now)).
+    write('You gained 10 fishing exp!'),nl.
 
 fish :-
     in_game(false),!,
@@ -64,12 +48,11 @@ fish :-
     in_game(true),
     atFishingSpot,!,
     level_fishing(Fishing_level),
-    level_fishingrod(Fishingrod_level),
-    Multiply is 11 - Fishing_level - Fishingrod_level,
+    getLevelFishingRod(FishingRodLevel),
+    Multiply is 11 - Fishing_level - FishingRodLevel,
     random(1,90,Number),
     Result is mod(Number,Multiply),
     fishing(Result,Fishing_level).
 fish :-
     !,
     write('You can call fish command only if you near water.').
-    
