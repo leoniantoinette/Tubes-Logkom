@@ -217,3 +217,8 @@ failState(d, g) :-
   d >= 365, g < 20000,
   write('You have worked hard, but in the end result is all that matters.\n'),
   write('May God bless you in the future with kind people!\n').
+
+addMove :-
+  retract(move(M)),
+  M_new is M + 1,
+  asserta(move(M_new)).
