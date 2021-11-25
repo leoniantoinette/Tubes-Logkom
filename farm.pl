@@ -72,19 +72,19 @@ plant :-
 harvestCarrot :-
     posisi(X,Y),
     crop_stat(carrot_plant,X,Y,A),
-    ((A >= 14 -> write('You harvested carrot.\n'), update_inventory('carrot', 1));
+    ((A >= 56 -> write('You harvested carrot.\n'), update_inventory('carrot', 1));
     (write('Your carrot is not ready to be harvested yet!\n'))).
 
 harvestCorn :-
     posisi(X,Y),
     crop_stat(corn_plant,X,Y,A),
-    ((A >= 12 -> write('You harvested corn.\n'), update_inventory('corn', 1));
+    ((A >= 48 -> write('You harvested corn.\n'), update_inventory('corn', 1));
     (write('Your corn is not ready to be harvested yet!\n'))).
 
 harvestTomato :-
     posisi(X,Y),
     crop_stat(tomato_plant,X,Y,A),
-    ((A >= 20 -> write('You harvested tomato.\n'), update_inventory('tomato', 1));
+    ((A >= 80 -> write('You harvested tomato.\n'), update_inventory('tomato', 1));
     (write('Your tomato is not ready to be harvested yet!\n'))).
 
 harvest :- 
