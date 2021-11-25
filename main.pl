@@ -221,4 +221,5 @@ failState :-
 addMove :-
   retract(move(M)),
   M_new is M + 1,
-  asserta(move(M_new)).
+  asserta(move(M_new)),
+  updateCropAge.
