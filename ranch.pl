@@ -1,6 +1,11 @@
 :- dynamic(ternakStatus/4).
 /* Format berupa : ternakStatus(Name, Count, Processing Time , Deadline) */
 
+/* Sistem ranch sebagai berikut.
+ * Saat terjadi peningkatan level pada equipment shovel, maka ternak yang sedang berjalan waktu batas untuk garapnya tidak akan mengalami perubahan.
+ * Jadi yang mengalami perubahan itu sewaktu membeli hewan ternak, maka batas waktu garap hasil ternaknya akan berkurang.
+ */
+
 % TODO
 % blm tambah exp
 
@@ -130,7 +135,8 @@ cow :-
       write('Your cow hasn\'t produced any milk.'), nl,
       write('Please check again later.')
   ;   format('Your cow has produced ~w milks. ~n',[Count]),
-      format('You got ~w milks! ~n',[Count])
+      format('You got ~w milks! ~n',[Count]),
+      updateQuestWhenGetProductFromAnimal(Count)
   ).
 
 chicken :-
@@ -140,7 +146,8 @@ chicken :-
       write('Your cow hasn\'t produced any egg.'), nl,
       write('Please check again later.')
   ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
-      format('You got ~w eggs! ~n',[Count])
+      format('You got ~w eggs! ~n',[Count]),
+      updateQuestWhenGetProductFromAnimal(Count)
   ).
 
 pig :-
@@ -150,7 +157,8 @@ pig :-
       write('Your cow hasn\'t produced any bacon.'), nl,
       write('Please check again later.')
   ;   format('Your chicken has produced ~w bacons. ~n',[Count]),
-      format('You got ~w bacons! ~n',[Count])
+      format('You got ~w bacons! ~n',[Count]),
+      updateQuestWhenGetProductFromAnimal(Count)
   ).
 
 /* Setiap melakukan aktivitas */
