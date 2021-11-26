@@ -214,16 +214,17 @@ a :-
    serta mengupdate waktu tiap tanaman dan hewan ternak
    jika banyak waktu telah melebihi batas, yaitu 96 maka hari akan bertambah */
 addTime :-
-  retract(move(PrevMove)),
-  NewMove is PrevMove + 1,
-  ( NewMove =:= 96
-    -> NewMovee = 0,
+  retract(time(PrevTime)),
+  NewTime is PrevTime + 1,
+  ( NewTime =:= 96
+    -> NewTimee = 0,
     retract(day(PrevDay)),
     NewDay is PrevDay + 1,
     assertz(day(NewDay))
-    ; NewMovee = NewMove
+    ; NewTimee = NewTime
   ),
-  assertz(move(NewMovee)),
+  assertz(time(NewTimee)),
   updateLevel,
+  checkState,
   updateCropAge,
   updateProcessRanch.

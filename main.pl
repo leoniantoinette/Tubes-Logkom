@@ -2,7 +2,7 @@
 :- dynamic(in_game/1). % status permainan
 :- dynamic(in_quest/1). % menunjukkan apakah memiliki on-going quest
 :- dynamic(day/1). % menunjukkan hari ke berapa
-:- dynamic(move/1). % jumlah move dalam satu hari
+:- dynamic(time/1). % jumlah time yang telah dilewati dalam satu hari
 :- dynamic(gold/1). % jumlah gold dari pemain
 :- dynamic(exp_pemain/1). % jumlah exp pemain
 :- dynamic(exp_farming/1). % jumlah exp farming
@@ -32,19 +32,25 @@ in_game(false).
 /* startGame */
 startGame :-
   write('Harvest Star!'), nl,
-  write('Let\'s play and pay our debts togehter!'), nl, nl,
-  write('-----------------------------------------------------------'), nl,
-  write('|                       Harvest Star                       |'), nl,
-  write('| 1. start  : untuk memulai permainan                      |'), nl,
-  write('| 2. map    : menampilkan peta                             |'), nl,
-  write('| 3. status : menampilkan status terkini                   |'), nl,
-  write('| 4. w      : bergerak ke utara 1 langkah                  |'), nl,
-  write('| 5. s      : bergerak ke selatan 1 langkah                |'), nl,
-  write('| 6. d      : bergerak ke timur 1 langkah                  |'), nl,
-  write('| 7. a      : bergerak ke barat 1 langkah                  |'), nl,
-  write('| 8. help   : menampilkan bantuan                          |'), nl,
-  write('| 9. quit   : untuk mengakhiri permainan                   |'), nl,
-  write('-----------------------------------------------------------').
+  write('  _                               _'), nl,
+  write(' | |__   __ _ _ ____   _____  ___| |_'), nl,
+  write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
+  write(' | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
+  write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
+
+  write(' Let\'s play and pay our debts togehter!'), nl, nl,
+  write('************************************************************'), nl,
+  write('*                       Harvest Star                       *'), nl,
+  write('* 1. start  : untuk memulai permainan                      *'), nl,
+  write('* 2. map    : menampilkan peta                             *'), nl,
+  write('* 3. status : menampilkan status terkini                   *'), nl,
+  write('* 4. w      : bergerak ke utara 1 langkah                  *'), nl,
+  write('* 5. s      : bergerak ke selatan 1 langkah                *'), nl,
+  write('* 6. d      : bergerak ke timur 1 langkah                  *'), nl,
+  write('* 7. a      : bergerak ke barat 1 langkah                  *'), nl,
+  write('* 8. help   : menampilkan bantuan                          *'), nl,
+  write('* 9. quit   : untuk mengakhiri permainan                   *'), nl,
+  write('************************************************************').
 
 /* start */
 start :-
@@ -70,7 +76,7 @@ initialize :-
   assertz(posisi(1,1)),
   assertz(in_quest(false)),
   assertz(day(1)),
-  assertz(move(0)),
+  assertz(time(0)),
   assertz(gold(1000)),
   assertz(exp_pemain(0)),
   assertz(exp_farming(0)),
@@ -138,6 +144,10 @@ status :-
 status :-
   in_game(true),
   !,
+  day(Day),
+  format('Day ~w ~n',[Day]),
+  time(Time),
+  format('Time: ~w ~n',[Time]),
   displayJob,
   level_pemain(Lpemain),
   format('Level: ~w ~n',[Lpemain]),
@@ -181,46 +191,55 @@ help :-
 help :-
   in_game(true),
   !,
-  write('---------------------------------------------------------------'), nl,
-  write('|                       Harvest Star                           |'), nl,
-  write('|                                                              |'), nl,
-  write('| 1. status : menampilkan status terkini                       |'), nl,
-  write('| 2. map    : menampilkan peta                                 |'), nl,
-  write('| 3. w      : bergerak ke utara 1 langkah                      |'), nl,
-  write('| 4. s      : bergerak ke selatan 1 langkah                    |'), nl,
-  write('| 5. d      : bergerak ke timur 1 langkah                      |'), nl,
-  write('| 6. a      : bergerak ke barat 1 langkah                      |'), nl,
-  write('| 7. quit   : untuk mengakhiri permainan                       |'), nl,
-  write('| 8. inventory  : menampilkan inventory                        |'), nl,
-  write('| 9. quest   : mengambil quest (hanya dapat dilakukan di Q)    |'), nl,
-  write('|                                                              |'), nl,
-  write('| Aktivitas Farming :                                          |'), nl,
-  write('| 1. dig  : untuk menggali tile                                |'), nl,
-  write('| 2. plant  : untuk menanam seed                               |'), nl,
-  write('| 3. harvest  : untuk memanen tanaman                          |'), nl,
-  write('|                                                              |'), nl,
-  write('| Aktivitas Fishing : (hanya dapat dilakukan di sekitar danau) |'), nl,
-  write('| 1. fish : memancing untuk mendapatkan ikan                   |'), nl,
-  write('|                                                              |'), nl,
-  write('| Aktivitas Ranching : (hanya dapat dilakukan di R)            |'), nl,
-  write('| 1. ranch  : untuk memilih hewan ternak                       |'), nl,
-  write('| 2. cow  : untuk mengambil milk                               |'), nl,
-  write('| 3. chicken  : untuk mengambil egg                            |'), nl,
-  write('| 4. pig  : untuk mengambil bacon                              |'), nl,
-  write('---------------------------------------------------------------').
+  write('***************************************************************'), nl,
+  write('*                       Harvest Star                           *'), nl,
+  write('*                                                              *'), nl,
+  write('* 1. status    : menampilkan status terkini                    *'), nl,
+  write('* 2. map       : menampilkan peta                              *'), nl,
+  write('* 3. w         : bergerak ke utara 1 langkah                   *'), nl,
+  write('* 4. s         : bergerak ke selatan 1 langkah                 *'), nl,
+  write('* 5. d         : bergerak ke timur 1 langkah                   *'), nl,
+  write('* 6. a         : bergerak ke barat 1 langkah                   *'), nl,
+  write('* 7. quit      : untuk mengakhiri permainan                    *'), nl,
+  write('* 8. inventory : menampilkan inventory                         *'), nl,
+  write('* 9. quest     : mengambil quest (hanya dapat dilakukan di Q)  *'), nl,
+  write('*                                                              *'), nl,
+  write('* Aktivitas Farming :                                          *'), nl,
+  write('* 1. dig     : untuk menggali tile                             *'), nl,
+  write('* 2. plant   : untuk menanam seed                              *'), nl,
+  write('* 3. harvest : untuk memanen tanaman                           *'), nl,
+  write('*                                                              *'), nl,
+  write('* Aktivitas Fishing : (hanya dapat dilakukan di sekitar danau) *'), nl,
+  write('* 1. fish : memancing untuk mendapatkan ikan                   *'), nl,
+  write('*                                                              *'), nl,
+  write('* Aktivitas Ranching : (hanya dapat dilakukan di R)            *'), nl,
+  write('* 1. ranch   : untuk memilih hewan ternak                      *'), nl,
+  write('* 2. cow     : untuk mengambil milk                            *'), nl,
+  write('* 3. chicken : untuk mengambil egg                             *'), nl,
+  write('* 4. pig     : untuk mengambil bacon                           *'), nl,
+  write('***************************************************************').
 
-goalState(d, g) :-
+goalState :-
   day(d), gold(g),
   d < 365, g >= 20000,
-  write('Congratulations! You have finally collected 20000 golds!\n').
-goalState(d, g) :- !.
+  !,
+  write('                                  _         _       _   _                 _'), nl,
+  write('   ___ ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |'), nl,
+  write('  / __/ _ \\| \'_ \\ / _` | \'__/ _` | __| | | | |/ _` | __| |/ _ \\| \'_ \\/ __| |'), nl,
+  write(' | (_| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|'), nl,
+  write('  \\___\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)'), nl,
+  write('                  |___/     '), nl,
+  write('  You have finally collected 20000 golds!\n').
+goalState :- !.                                              
 
-failState(d, g) :-
+failState :-
   day(d), gold(g),
   d >= 365, g < 20000,
+  !,
   write('You have worked hard, but in the end result is all that matters.\n'),
-  write('May God bless you in the future with kind people!\n').
-failState(d, g) :- !.
+  write('May God bless you in the future with kind people!\n'),
+  in_game(false).
+failState :- !.
 
 checkState :- !, goalState, !, failState.
 
