@@ -99,12 +99,12 @@ ranch :-
   in_game(true),
   atRanch,!,
   write('Welcome to the ranch!'), nl,
-  makeListRanch(ListName, ListCount),
-  totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
   (   checkWhenRanchEmpty ->
       write('You don`t have any animals in the ranch'),
       !
-  ;   write('You have:'),nl,
+  ;   makeListRanch(ListName, ListCount),
+      totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
+      write('You have:'),nl,
       (   CountCow \= 0 ->
           format('- ~w Cow ~n',[CountCow])
       ;!
