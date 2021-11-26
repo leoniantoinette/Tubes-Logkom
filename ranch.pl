@@ -1,6 +1,11 @@
 :- dynamic(ternakStatus/4).
 /* Format berupa : ternakStatus(Name, Count, Processing Time , Deadline) */
 
+/* Sistem ranch sebagai berikut.
+ * Saat terjadi peningkatan level pada equipment shovel, maka ternak yang sedang berjalan waktu batas untuk garapnya tidak akan mengalami perubahan.
+ * Jadi yang mengalami perubahan itu sewaktu membeli hewan ternak, maka batas waktu garap hasil ternaknya akan berkurang.
+ */
+
 % TODO
 % blm tambah exp
 
