@@ -35,10 +35,13 @@ get_fish(5) :-
 fishing(X,_) :-
     X \= 0,
     write('You didn\'t get anything!'),nl,
-    write('You gained 5 fishing exp!'),nl,!.
+    write('You gained 5 fishing exp!'),nl,!,
+    updateExpFishingN.
 fishing(0,Fishing_level) :-
     get_fish(Fishing_level),
-    write('You gained 10 fishing exp!'),nl.
+    !,
+    updateExpFishingY,
+    addFishToQuest.
 
 fish :-
     in_game(false),!,
@@ -56,3 +59,26 @@ fish :-
 fish :-
     !,
     write('You can call fish command only if you near water.').
+
+/* updateExpFishingN : update exp fishing jika tidak mendapat ikan */
+updateExpFishingN :-
+    retract(exp_fishing(ExpFishing)),
+    retract(exp_pemain(ExpPemain)),
+    ExpFishingNew is ExpFishing + 5,
+    ExpPemainNew is ExpPemain + 5,
+    assertz(exp_fishing(ExpFishingNew)),
+    assertz(exp_pemain(ExpPemainNew)).
+
+/* updateExpFishingY : update exp fishing jika mendapat ikan */
+updateExpFishingY :-
+    retract(exp_fishing(ExpFishing)),
+    retract(exp_pemain(ExpPemain)),
+    ( fisherman(true)
+    -> ExpFishingNew is ExpFishing + 15,
+    ExpPemainNew is ExpPemain + 15,
+    write('You gained 15 fishing exp!'), nl
+    ; ExpFishingNew is ExpFishing + 10,
+    ExpPemainNew is ExpPemain + 10,
+    write('You gained 10 fishing exp!'), nl ),
+    assertz(exp_fishing(ExpFishingNew)),
+    assertz(exp_pemain(ExpPemainNew)).

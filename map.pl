@@ -103,7 +103,7 @@ w :-
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
   write('You moved north! Try using \'map\' to see your position now.'),
-  addMove.
+  addTime.
 
 /* s : bergerak ke selatan 1 langkah */
 s :-
@@ -138,7 +138,7 @@ s :-
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
   write('You moved south! Try using \'map\' to see your position now.'),
-  addMove.
+  addTime.
 
 /* d : bergerak ke timur 1 langkah */
 d :-
@@ -173,7 +173,7 @@ d :-
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
   write('You moved east! Try using \'map\' to see your position now.'),
-  addMove.
+  addTime.
 
 /* a : bergerak ke barat 1 langkah */
 a :-
@@ -208,14 +208,15 @@ a :-
   retract(posisi(_,_)),
   assertz(posisi(Xnew,Ynew)),
   write('You moved west! Try using \'map\' to see your position now.'),
-  addMove.
+  addTime.
 
-/* addMove digunakan untuk menambah banyak move dan mengecek banyak langkah yang telah dilakukan
-   jika banyak langkah telah melebihi batas, yaitu 48 maka hari akan bertambah */
-addMove :-
+/* addTime digunakan untuk menambah 1 waktu dan mengecek banyak waktu yang telah dilalui
+   serta mengupdate waktu tiap tanaman dan hewan ternak
+   jika banyak waktu telah melebihi batas, yaitu 96 maka hari akan bertambah */
+addTime :-
   retract(move(PrevMove)),
   NewMove is PrevMove + 1,
-  ( NewMove =:= 48
+  ( NewMove =:= 96
     -> NewMovee = 0,
     retract(day(PrevDay)),
     NewDay is PrevDay + 1,
@@ -223,5 +224,6 @@ addMove :-
     ; NewMovee = NewMove
   ),
   assertz(move(NewMovee)),
+  updateLevel,
   updateCropAge,
   updateProcessRanch.

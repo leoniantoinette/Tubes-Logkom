@@ -60,6 +60,7 @@ start :-
   write('3. Rancher'), nl,
   write('> '),
   read(Num),
+  !,
   chooseJob(Num).
 
 /* initialize */
@@ -212,9 +213,85 @@ goalState(d, g) :-
   day(d), gold(g),
   d < 365, g >= 20000,
   write('Congratulations! You have finally collected 20000 golds!\n').
+goalState(d, g) :- !.
 
 failState(d, g) :-
   day(d), gold(g),
   d >= 365, g < 20000,
   write('You have worked hard, but in the end result is all that matters.\n'),
   write('May God bless you in the future with kind people!\n').
+failState(d, g) :- !.
+
+checkState :- !, goalState, !, failState.
+
+/* updateLevel : untuk mengupdate level jika telah melewati batas tertentu */
+updateLevel :-
+  updateLevelFarming,
+  updateLevelFishing,
+  updateLevelRanching.
+
+updateLevelFarming :-
+  retract(exp_farming(ExpFarming)),
+  retract(exp_pemain(ExpPemain)),
+  retract(level_farming(LevelFarming)),
+  retract(level_pemain(LevelPemain)),
+  ( ExpFarming >= 150
+  -> ExpFarmingNew is ExpFarming - 150,
+  (LevelFarming < 5
+  -> LevelFarmingNew is LevelFarming + 1
+  ; LevelFarmingNew is 5)
+  ; ExpFarmingNew = ExpFarming,
+  LevelFarmingNew is LevelFarming ),
+  assertz(exp_farming(ExpFarmingNew)),
+  assertz(level_farming(LevelFarmingNew)),
+  ( ExpPemain >= 300
+  -> ExpPemainNew is ExpPemain - 300,
+  LevelPemainNew is LevelPemain + 1
+  ; ExpPemainNew = ExpPemain,
+  LevelPemainNew = LevelPemain ),
+  assertz(exp_pemain(ExpPemainNew)),
+  assertz(level_pemain(LevelPemainNew)).
+
+  updateLevelFishing :-
+  retract(exp_fishing(ExpFishing)),
+  retract(exp_pemain(ExpPemain)),
+  retract(level_fishing(LevelFishing)),
+  retract(level_pemain(LevelPemain)),
+  ( ExpFishing >= 150
+  -> ExpFishingNew is ExpFishing - 150,
+  (LevelFishing < 5
+  -> LevelFishingNew is LevelFishing + 1
+  ; LevelFishingNew is 5)
+  ; ExpFishingNew = ExpFishing,
+  LevelFishingNew is LevelFishing ),
+  assertz(exp_fishing(ExpFishingNew)),
+  assertz(level_fishing(LevelFishingNew)),
+  ( ExpPemain >= 300
+  -> ExpPemainNew is ExpPemain - 300,
+  LevelPemainNew is LevelPemain + 1
+  ; ExpPemainNew = ExpPemain,
+  LevelPemainNew = LevelPemain ),
+  assertz(exp_pemain(ExpPemainNew)),
+  assertz(level_pemain(LevelPemainNew)).
+
+updateLevelRanching :-
+  retract(exp_ranching(ExpRanching)),
+  retract(exp_pemain(ExpPemain)),
+  retract(level_ranching(LevelRanching)),
+  retract(level_pemain(LevelPemain)),
+  ( ExpRanching >= 150
+  -> ExpRanchingNew is ExpRanching - 150,
+  (LevelRanching < 5
+  -> LevelRanchingNew is LevelRanching + 1
+  ; LevelRanchingNew is 5)
+  ; ExpRanchingNew = ExpRanching,
+  LevelRanchingNew is LevelRanching ),
+  assertz(exp_ranching(ExpRanchingNew)),
+  assertz(level_ranching(LevelRanchingNew)),
+  ( ExpPemain >= 300
+  -> ExpPemainNew is ExpPemain - 300,
+  LevelPemainNew is LevelPemain + 1
+  ; ExpPemainNew = ExpPemain,
+  LevelPemainNew = LevelPemain ),
+  assertz(exp_pemain(ExpPemainNew)),
+  assertz(level_pemain(LevelPemainNew)).
