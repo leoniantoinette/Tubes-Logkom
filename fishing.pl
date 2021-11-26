@@ -58,7 +58,8 @@ fish :-
     Multiply is 11 - Fishing_level - FishingRodLevel,
     random(1,90,Number),
     Result is mod(Number,Multiply),
-    fishing(Result,Fishing_level).
+    fishing(Result,Fishing_level),
+    addTime.
 fish :-
     !,
     write('You can call fish command only if you near water.').

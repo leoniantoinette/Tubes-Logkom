@@ -9,12 +9,17 @@
 
 updateFarmExp :-
     retract(exp_farming(A)),
+    retract(exp_pemain(B)),
     (
         farmer(true) ->
              A1 is A + 15,
-             asserta(exp_farming(A1))
+             B1 is B + 15,
+             asserta(exp_farming(A1)),
+             asserta(exp_pemain(B1))
     ;   A1 is A + 10,
-        asserta(exp_farming(A+10))
+        B1 is B + 10,
+        asserta(exp_farming(A1)),
+        asserta(exp_pemain(B1))
     ).
 
 updateCropAge :-
@@ -48,7 +53,7 @@ dig :-
             assertz(pos_digged(X,Y)),
             write('You digged the tile.'),
             updateFarmExp,
-            addMove
+            addTime
         )
     ).
 
@@ -77,7 +82,7 @@ plant :-
         reduceInventory('carrot seed',1),
         assertz(crop_stat(carrot_plant, X, Y, 0)),
         updateFarmExp,
-        addMove,
+        addTime,
         write('You planted a carrot seed.\n')
     ;   In = 'corn' ->
         inventory(_,'corn seed',_,_,_,_,_,Count),
@@ -85,7 +90,7 @@ plant :-
         reduceInventory('corn seed',1),
         assertz(crop_stat(corn_plant, X, Y, 0)),
         updateFarmExp,
-        addMove,
+        addTime,
         write('You planted a corn seed.\n')
     ;   In = 'tomato' ->
         inventory(_,'tomato seed',_,_,_,_,_,Count),
@@ -93,7 +98,7 @@ plant :-
         reduceInventory('tomato seed',1),
         assertz(crop_stat(tomato_plant, X, Y, 0)),
         updateFarmExp,
-        addMove,
+        addTime,
         write('You planted a tomato seed.\n')
     ;   write('There are no such seeds in your inventory!\n')
     ).
@@ -142,16 +147,16 @@ harvest :-
         harvestCarrot,
         updateFarmExp,
         updateQuestWhenHaverst,
-        addMove
+        addTime
     ;   crop_stat(corn_plant,X,Y,_) ->
         harvestCorn,
         updateFarmExp,
         updateQuestWhenHaverst,
-        addMove
+        addTime
     ;   crop_stat(tomato_plant,X,Y,_) ->
         harvestTomato,
         updateFarmExp,
         updateQuestWhenHaverst,
-        addMove
+        addTime
     ;   write('There is no plant here.')
     ).
