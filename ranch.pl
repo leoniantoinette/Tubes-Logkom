@@ -5,12 +5,31 @@
 % blm tambah exp
 
 addTernakStatus(Name, Addition):-
+  inventory(2,_,_,_,_,_,_,Level),
   (   Name = 'cow' ->
-      assertz(ternakStatus(Name,Addition,0,48))
+      (   Level == 1 ->
+          assertz(ternakStatus(Name,Addition,0,48))
+      ;   Level == 2 ->
+          assertz(ternakStatus(Name,Addition,0,44))
+      ;   Level == 3 ->
+          assertz(ternakStatus(Name,Addition,0,40))
+      )
   ;   Name = 'chicken' ->
-      assertz(ternakStatus(Name,Addition,0,44))
+      (   Level == 1 ->
+          assertz(ternakStatus(Name,Addition,0,44))
+      ;   Level == 2 ->
+          assertz(ternakStatus(Name,Addition,0,40))
+      ;   Level == 3 ->
+          assertz(ternakStatus(Name,Addition,0,36))
+      )
   ;   Name = 'pig' ->
-      assertz(ternakStatus(Name,Addition,0,68))
+      (   Level == 1 ->
+          assertz(ternakStatus(Name,Addition,0,68))
+      ;   Level == 2 ->
+          assertz(ternakStatus(Name,Addition,0,64))
+      ;   Level == 3 ->
+          assertz(ternakStatus(Name,Addition,0,60))
+      )
   ).
 
 makeListRanch(ListName, ListCount):-
@@ -56,8 +75,8 @@ checkWhoCanBeTaken([A|W], [B|X], [C|Y], Count, Name):-
     (   A == Name ->
         (   B > C ->
             retract(ternakStatus(A,Amount,B,C)),
-            CountNew is Count+Amount,
-            checkWhoCanBeTaken(W,X,Y,CountNew,Name)
+            checkWhoCanBeTaken(W,X,Y,CountCurrent,Name),
+            Count is CountCurrent+Amount
         ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
         )
     ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
@@ -93,7 +112,6 @@ ranch :-
 
 cow :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
-  Count is 0,
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'cow'),
   (   Count == 0 ->
       write('Your cow hasn\'t produced any milk.'), nl,
@@ -104,7 +122,6 @@ cow :-
 
 chicken :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
-  Count is 0,
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'chicken'),
   (   Count == 0 ->
       write('Your cow hasn\'t produced any egg.'), nl,
@@ -115,7 +132,6 @@ chicken :-
 
 pig :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
-  Count is 0,
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'pig'),
   (   Count == 0 ->
       write('Your cow hasn\'t produced any bacon.'), nl,
@@ -128,8 +144,3 @@ pig :-
 updateProcessRanch :-
   makeListRanch(ListName, ListCount),
   updateTernakStatus(ListName, ListCount, true, false),!.
-
-/* Setiap kenaikan level fishing */
-updateLevelRanch :-
-  makeListRanch(ListName, ListCount),
-  updateTernakStatus(ListName, ListCount, false, true),!.
