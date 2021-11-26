@@ -137,7 +137,8 @@ cow :-
   ;   format('Your cow has produced ~w milks. ~n',[Count]),
       format('You got ~w milks! ~n',[Count]),
       updateQuestWhenGetProductFromAnimal(Count)
-  ).
+  ),
+  addTime.
 
 chicken :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
@@ -148,7 +149,8 @@ chicken :-
   ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
       format('You got ~w eggs! ~n',[Count]),
       updateQuestWhenGetProductFromAnimal(Count)
-  ).
+  ),
+  addTime.
 
 pig :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
@@ -159,7 +161,8 @@ pig :-
   ;   format('Your chicken has produced ~w bacons. ~n',[Count]),
       format('You got ~w bacons! ~n',[Count]),
       updateQuestWhenGetProductFromAnimal(Count)
-  ).
+  ),
+  addTime.
 
 /* Setiap melakukan aktivitas */
 updateProcessRanch :-
