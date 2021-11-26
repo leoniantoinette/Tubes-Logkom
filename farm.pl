@@ -9,8 +9,20 @@
 
 updateFarmExp :-
     retract(exp_farming(A)),
-    ((farmer(true) -> (A1 is A + 15, asserta(exp_farming(A1))));
-    (A1 is A + 10, asserta(exp_farming(A+10)))).
+    (
+        farmer(true) ->
+             A1 is A + 15,
+             asserta(exp_farming(A1))
+    ;   A1 is A + 10,
+        asserta(exp_farming(A+10))
+    ).
+
+updateCropAge :-
+    forall(crop_stat(P,X,Y,A),
+           (retract(crop_stat(P,X,Y,A)),
+            A_new is A + 1,
+            assertz(crop_stat(P,X,Y,A_new)))
+          ).
 
 /* metode untuk melakukan dig/penggalian */
 dig :-
