@@ -78,7 +78,7 @@ updateQuestWhenGetProductFromAnimal(Amount) :-
   ),
   assertz(quest(X,Y,Zneww,Exp,Gold)),
   checkQuest.
-updateQuestWhenGetProductFromAnimal(_) :- !
+updateQuestWhenGetProductFromAnimal(_) :- !.
 
 /* Cek jika Quest telah selesai dilaksanakan */
 checkQuest :-
