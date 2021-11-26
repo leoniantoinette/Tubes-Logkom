@@ -121,7 +121,7 @@ ranch :-
   ).
 ranch :-
   !,
-  write('You can call quest command only if you are at ranch.').
+  write('You can call ranch command only if you are at ranch.').
 
 cow :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
