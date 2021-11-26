@@ -1,11 +1,6 @@
 :- dynamic(ternakStatus/4).
 /* Format berupa : ternakStatus(Name, Count, Processing Time , Deadline) */
 
-/* Sistem ranch sebagai berikut.
- * Saat terjadi peningkatan level pada equipment shovel, maka ternak yang sedang berjalan waktu batas untuk garapnya tidak akan mengalami perubahan.
- * Jadi yang mengalami perubahan itu sewaktu membeli hewan ternak, maka batas waktu garap hasil ternaknya akan berkurang.
- */
-
 % TODO
 % blm tambah exp
 
@@ -87,33 +82,46 @@ checkWhoCanBeTaken([A|W], [B|X], [C|Y], Count, Name):-
     ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
     ).
 
+checkWhenRanchEmpty :-
+  makeListRanch(ListName, ListCount),
+  totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
+  CountCow == 0,
+  CountChicken == 0,
+  CountPig == 0,
+  !.
+
 ranch :-
   in_game(false),
   !,
-  write('You haven\'t started the game! Try using \'start.\' to start the game.').
+  write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  fail.
 ranch :-
   in_game(true),
-  atRanch,
-  write('Welcome to the ranch! You have:'), nl,
-  makeListRanch(ListName, ListCount),
-  totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
-  (   CountCow \= 0 ->
-      format('- ~w Cow ~n',[CountCow])
-  ;   nl
-  ),
-  (   CountChicken \= 0 ->
-      format('- ~w Chicken ~n',[CountChicken])
-  ;   nl
-  ),
-  (   CountPig \= 0 ->
-      format('- ~w Pig ~n',[CountPig])
-  ;   nl
-  ),
-  write('What do you want to do?').
+  atRanch,!,
+  write('Welcome to the ranch!'), nl,
+  (   checkWhenRanchEmpty ->
+      write('You don`t have any animals in the ranch'),
+      !
+  ;   makeListRanch(ListName, ListCount),
+      totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
+      write('You have:'),nl,
+      (   CountCow \= 0 ->
+          format('- ~w Cow ~n',[CountCow])
+      ;!
+      ),
+      (   CountChicken \= 0 ->
+          format('- ~w Chicken ~n',[CountChicken])
+      ;!
+      ),
+      (   CountPig \= 0 ->
+          format('- ~w Pig ~n',[CountPig])
+      ;!
+      ),
+      write('What do you want to do?')
+  ).
 ranch :-
-  in_game(true),
   !,
-  write('You can call quest command only if you are at ranch.').
+  write('You can call ranch command only if you are at ranch.').
 
 cow :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),

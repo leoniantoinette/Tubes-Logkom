@@ -1,4 +1,9 @@
-:- dynamic(quest/5). % (X,Y,Z,Exp,Gold) : hasil panen, ikan, ternak yg harus dikumpulkan, exp, gold yang diperoleh
+:- dynamic(quest/5).
+/* Format berupa : ( X,Y,Z,Exp,Gold )
+ * X berupa hasil yang dipanen
+ * Y berupa ikan yang diperoleh
+ * Z berupa hasil ternak yang diperoleh
+ */
 
 quest :-
   in_game(false),
@@ -32,46 +37,51 @@ quest :-
   in_game(true),
   write('You can call quest command only if you are at Q.').
 
-addHarvestToQuest :-
+updateQuestWhenHaverst :-
   in_game(true),
   in_quest(true),
   !,
   retract(quest(X,Y,Z,Exp,Gold)),
-  ( X > 0
-  -> Xnew is X - 1
-  ; Xnew = X ),
+  (   X > 0 ->
+      Xnew is X - 1
+  ; Xnew = X
+  ),
   assertz(quest(Xnew,Y,Z,Exp,Gold)),
   checkQuest.
-addHarvestToQuest :- !.
+updateQuestWhenHaverst :- !.
 
-addFishToQuest :-
+updateQuestWhenGetFish :-
   in_game(true),
   in_quest(true),
   !,
   retract(quest(X,Y,Z,Exp,Gold)),
-  ( Y > 0
-  -> Ynew is Y - 1
-  ; Ynew = Y ),
+  (   Y > 0 -> 
+      Ynew is Y - 1
+  ; Ynew = Y 
+  ),
   assertz(quest(X,Ynew,Z,Exp,Gold)),
   checkQuest.
-addFishToQuest :- !.
+updateQuestWhenGetFish :- !.
 
-addProductToQuest(Amount) :-
+updateQuestWhenGetProductFromAnimal(Amount) :-
   in_game(true),
   in_quest(true),
   !,
   retract(quest(X,Y,Z,Exp,Gold)),
-  ( Z > 0
-  -> Znew is Y - Amount,
-    ( Znew < 0
-    -> Zneww = 0
-    ; Zneww = Znew )
-  ; Zneww = Z ),
+  (   Z > 0 ->
+      Znew is Z - Amount,
+      (   Znew < 0 ->
+          Zneww = 0
+      ; Zneww = Znew
+      )
+  ; Zneww = Z
+  ),
   assertz(quest(X,Y,Zneww,Exp,Gold)),
   checkQuest.
-addProductToQuest :- !.
+updateQuestWhenGetProductFromAnimal(_) :- !
 
-checkQuest :- % jika quest telah selesai
+/* Cek jika Quest telah selesai dilaksanakan */
+checkQuest :-
   in_game(true),
   in_quest(true),
   quest(X,Y,Z,Exp,Gold),
@@ -89,5 +99,4 @@ checkQuest :- % jika quest telah selesai
   assertz(gold(NewGold)),
   retract(quest(_,_,_,_,_)),
   write('Congratulations! You have done your quest!').
-
 checkQuest :- !.

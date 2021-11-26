@@ -139,35 +139,19 @@ harvest :-
     posisi(X,Y),
     (
         crop_stat(carrot_plant,X,Y,_) ->
-         harvestCarrot,
-         updateFarmExp,
-         addHarvestToQuest,
-         addMove
+        harvestCarrot,
+        updateFarmExp,
+        updateQuestWhenHaverst,
+        addMove
     ;   crop_stat(corn_plant,X,Y,_) ->
-         harvestCorn,
-         updateFarmExp,
-         addHarvestToQuest,
-         addMove
+        harvestCorn,
+        updateFarmExp,
+        updateQuestWhenHaverst,
+        addMove
     ;   crop_stat(tomato_plant,X,Y,_) ->
         harvestTomato,
         updateFarmExp,
-        addHarvestToQuest,
+        updateQuestWhenHaverst,
         addMove
-    ;   (write('There is no plant here.'))
+    ;   write('There is no plant here.')
     ).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
