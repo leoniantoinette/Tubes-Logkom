@@ -6,8 +6,20 @@
  * Jadi yang mengalami perubahan itu sewaktu membeli hewan ternak, maka batas waktu garap hasil ternaknya akan berkurang.
  */
 
-% TODO
-% blm tambah exp
+updateRanchExp :-
+    retract(exp_ranching(A)),
+    retract(exp_pemain(B)),
+    (
+        rancher(true) ->
+             A1 is A + 15,
+             B1 is B + 15,
+             asserta(exp_ranching(A1)),
+             asserta(exp_pemain(B1))
+    ;   A1 is A + 10,
+        B1 is B + 10,
+        asserta(exp_ranching(A1)),
+        asserta(exp_pemain(B1))
+    ).
 
 addTernakStatus(Name, Addition):-
   inventory(2,_,_,_,_,_,_,Level),
@@ -136,6 +148,7 @@ cow :-
       write('Please check again later.')
   ;   format('Your cow has produced ~w milks. ~n',[Count]),
       format('You got ~w milks! ~n',[Count]),
+      updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
@@ -148,6 +161,7 @@ chicken :-
       write('Please check again later.')
   ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
       format('You got ~w eggs! ~n',[Count]),
+      updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
@@ -160,6 +174,7 @@ pig :-
       write('Please check again later.')
   ;   format('Your chicken has produced ~w bacons. ~n',[Count]),
       format('You got ~w bacons! ~n',[Count]),
+      updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
