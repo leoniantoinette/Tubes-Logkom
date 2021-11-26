@@ -132,7 +132,10 @@ market :-
             buy
         ;   User_input = sell ->
             sell
-        ;   write('Your Input is Wrong! You are forced out of the market.')
+        ;   write('Your Input is Wrong!'),nl,
+            write('If you want to buy, input buy'),nl,
+            write('If you want to sell, input sell'),nl,nl,
+            market
         ).
 market :-
 	!,
