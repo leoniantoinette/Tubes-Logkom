@@ -9,12 +9,15 @@ getLevelFishingRod(LevelFishingRod):-
 
 fish_type(0):-
     write('You got tuna!'),nl,
+    updateQuestWhenGetFish,
     addInventory('tuna',1).
 fish_type(1):-
     write('You got salmon!'),nl,
+    updateQuestWhenGetFish,
     addInventory('salmon',1).
 fish_type(2) :-
     write('You got trout!'),nl,
+    updateQuestWhenGetFish,
     addInventory('trout',1).
 
 get_fish(Level_fishing) :-
