@@ -203,6 +203,7 @@ help :-
   write('* 7. quit      : untuk mengakhiri permainan                    *'), nl,
   write('* 8. inventory : menampilkan inventory                         *'), nl,
   write('* 9. quest     : mengambil quest (hanya dapat dilakukan di Q)  *'), nl,
+  write('* 10. my_quest : menampilkan on-going quest                    *'), nl,
   write('*                                                              *'), nl,
   write('* Aktivitas Farming :                                          *'), nl,
   write('* 1. dig     : untuk menggali tile                             *'), nl,

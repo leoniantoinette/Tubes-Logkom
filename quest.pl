@@ -37,6 +37,24 @@ quest :-
   in_game(true),
   write('You can call quest command only if you are at Q.').
 
+/* my_quest: untuk menampilkan sisa quest yang harus dikerjakan */
+my_quest :-
+  in_game(false),
+  !, 
+  write('You haven\'t started the game! Try using \'start.\' to start the game.').
+my_quest :-
+  in_game(true),
+  in_quest(false),
+  !,
+  write('You don\'t have any on-going quest.').
+my_quest :-
+  !,
+  quest(X,Y,Z,_,_),
+  write('You need to collect:'), nl,
+  format('- ~w harvest item ~n',[X]),
+  format('- ~w fish ~n',[Y]),
+  format('- ~w animal product ~n',[Z]).
+
 updateQuestWhenHaverst :-
   in_game(true),
   in_quest(true),
