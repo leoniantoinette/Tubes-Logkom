@@ -437,28 +437,36 @@ help :-
   write('***************************************************************').
 
 goalState :-
-  day(d), gold(g),
-  d < 365, g >= 20000,
-  !,
+  day(D), gold(G),
+  D =< 365, G >= 20000, 
+  !, nl,
   write('                                  _         _       _   _                 _'), nl,
   write('   ___ ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_(_) ___  _ __  ___| |'), nl,
   write('  / __/ _ \\| \'_ \\ / _` | \'__/ _` | __| | | | |/ _` | __| |/ _ \\| \'_ \\/ __| |'), nl,
   write(' | (_| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \\__ \\_|'), nl,
   write('  \\___\\___/|_| |_|\\__, |_|  \\__,_|\\__|\\__,_|_|\\__,_|\\__|_|\\___/|_| |_|___(_)'), nl,
   write('                  |___/     '), nl,
-  write('  You have finally collected 20000 golds!\n').
+  write('  You have finally collected 20000 golds!\n'),
+  retract(in_game(true)),
+  assertz(in_game(false)).
 goalState :- !.                                              
 
 failState :-
-  day(d), gold(g),
-  d >= 365, g < 20000,
-  !,
-  write('You have worked hard, but in the end result is all that matters.\n'),
-  write('May God bless you in the future with kind people!\n'),
-  in_game(false).
+  day(D), gold(G),
+  D > 365, G < 20000,
+  !, nl,
+  write('   ____                         ___ '), nl,
+  write('  / ___| __ _ _ __ ___   ___   / _ \\__   _____ _ __'), nl,
+  write(' | |  _ / _` | \'_ ` _ \\ / _ \\ | | | \\ \\ / / _ \\ \'__|'), nl,
+  write(' | |_| | (_| | | | | | |  __/ | |_| |\\ V /  __/ |'), nl,
+  write('  \\____|\\__,_|_| |_| |_|\\___|  \\___/  \\_/ \\___|_|'), nl,
+  write(' You have worked hard, but in the end result is all that matters.\n'),
+  write(' May God bless you in the future with kind people!\n'),
+  retract(in_game(true)),
+  assertz(in_game(false)).
 failState :- !.
 
-checkState :- !, goalState, !, failState.
+checkState :- !, goalState, failState.
 
 /* updateLevel : untuk mengupdate level jika telah melewati batas tertentu */
 updateLevel :-

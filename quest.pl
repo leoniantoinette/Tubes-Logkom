@@ -111,7 +111,7 @@ checkQuest :-
   assertz(in_quest(false)),
   retract(exp_pemain(CurrentExp)),
   retract(gold(CurrentGold)),
-  NewExp is CurrentExp + Exp,      % cek naik level ga
+  NewExp is CurrentExp + Exp, 
   NewGold is CurrentGold + Gold,
   assertz(exp_pemain(NewExp)),
   assertz(gold(NewGold)),

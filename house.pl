@@ -39,7 +39,9 @@ sleep :-
   NewTime = 0,
   assertz(day(NewDay)),
   assertz(time(NewTime)),
-  format('Good morning! Today is day ~w', [NewDay]).
+  format('Good morning! Today is day ~w ~n', [NewDay]),
+  meetSleepFairy,
+  checkState.
 sleep :-
   !,
   write('You can call sleep command only if you are at home.').
@@ -111,3 +113,57 @@ readDiary :-
 readDiary :-
   !,
   write('You can call readDiary command only if you are at home.').
+
+meetSleepFairy :-
+  random(1,20,Num),
+  Result is mod(Num,10),
+  !,
+  ( Result =:= 0
+  -> write('                     ,_  .--.'), nl,
+  write('               , ,   _)\\/    ;--.'), nl,
+  write('       . \' .    \\_\\-\'   |  .\'    \\'), nl,
+  write('      -= * =-   (.-,   /  /       |'), nl,
+  write('       \' .\\\'    ).  ))/ .\'   _/\\ /'), nl,
+  write('           \\_   \\_  /( /     \\ /('), nl,
+  write('           /_\\ .--\'   `-.    //  \\'), nl,
+  write('           ||\\/        , \'._//    |'), nl,
+  write('           ||/ /`(_ (_,;`-._/     /'), nl,
+  write('           \\_.\'   )   /`\\       .\''), nl,
+  write('                .\' .  |  ;.   /`'), nl,
+  write('               /      |\\(  `.('), nl,
+  write('              |   |/  | `    `'), nl,
+  write('              |   |  /'), nl,
+  write('              |   |.\''), nl,
+  write('           __/\'  /'), nl,
+  write('       _ .\'  _.-`'), nl,
+  write('    _.` `.-;`/'), nl,
+  write('   /_.-\'` / /'), nl,
+  write('         | /'), nl,
+  write('        ( /'), nl,
+  write('       /_/'), nl,
+  write('You met sleep fairy last night!'), nl, nl,
+  whereToGo
+  ; ! ).
+
+whereToGo :-
+  write('Where do you want to go today?'), nl,
+  drawMap,
+  write('In which row do you want to go?'), nl,
+  write('> '),
+  read(Row),
+  write('In which column do you want to go?'), nl,
+  write('> '),
+  read(Column),
+  checkInputPos(Row, Column).
+
+checkInputPos(Row, Column) :-
+  mapSize(ValidRow, ValidColumn),
+  (Row =< 0; Column =< 0; Row > ValidRow; Column > ValidColumn; pos_air(Row, Column)),
+  !,
+  write('You can\'t go to that position.'), nl, nl,
+  whereToGo.
+checkInputPos(Row, Column) :-
+  !,
+  retract(posisi(_,_)),
+  assertz(posisi(Row, Column)),
+  write('You managed to go to that position.').
