@@ -11,7 +11,7 @@ plural('carrot seed','carrot seeds').
 plural('corn seed','corn seeds').
 plural('tomato seed', 'tomato seeds').
 plural('cow','cows').
-plural('chicken', 'chinckens').
+plural('chicken', 'chickens').
 plural('pig','pigs').
 plural('gold','golds').
 

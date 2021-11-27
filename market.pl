@@ -106,6 +106,7 @@ buy :-
 	write('6. Pig (1000 golds)'),nl,
 	write('7. Increase your shovel level (300 golds/level)'),nl,
 	write('8. Increase your fishing rod level (500 golds/level)'),nl,
+	write('* Input exitShop if you\'re done shopping'), nl,
 	write('> '),
 	read(Item),
 	shop(Item,bought).
@@ -147,6 +148,7 @@ sell :-
 		makeListSell(ListName, ListCount),
 		displayListSell(ListName, ListCount),
 		write('What do you want to sell? '),nl,
+		write('* Input exitShop if you\'re done'), nl,
 		write('> '),
 		read(Item),
 		shop(Item,forsale)
