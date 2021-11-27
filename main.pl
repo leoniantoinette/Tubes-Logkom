@@ -15,6 +15,7 @@
 :- dynamic(level_farming/1).
 :- dynamic(level_fishing/1).
 :- dynamic(level_ranching/1).
+:- dynamic(diary/2). % format : (Day, IsiDiary)
 
 :- include('item.pl').
 :- include('map.pl').
@@ -31,14 +32,13 @@ in_game(false).
 
 /* startGame */
 startGame :-
-  write('Harvest Star!'), nl,
   write('  _                               _'), nl,
   write(' | |__   __ _ _ ____   _____  ___| |_'), nl,
   write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
   write(' | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
   write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
-
-  write(' Let\'s play and pay our debts togehter!'), nl, nl,
+  write('            Harvest Star!'), nl,
+  write(' Let\'s play and pay our debts together!'), nl, nl,
   write('************************************************************'), nl,
   write('*                       Harvest Star                       *'), nl,
   write('* 1. start  : untuk memulai permainan                      *'), nl,
