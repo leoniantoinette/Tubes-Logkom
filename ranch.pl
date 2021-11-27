@@ -153,6 +153,13 @@ ranch :-
   write('You can call ranch command only if you are at ranch.').
 
 cow :-
+  in_game(false),
+  !,
+  write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  fail.
+cow :-
+  in_game(true),
+  atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'cow'),
   (   Count == 0 ->
@@ -164,8 +171,18 @@ cow :-
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
+cow :-
+  !,
+  write('You can call cow command only if you are at ranch.').
 
 chicken :-
+  in_game(false),
+  !,
+  write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  fail.
+chicken :-
+  in_game(true),
+  atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'chicken'),
   (   Count == 0 ->
@@ -177,8 +194,18 @@ chicken :-
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
+chicken :-
+  !,
+  write('You can call chicken command only if you are at ranch.').
 
 pig :-
+  in_game(false),
+  !,
+  write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+  fail.
+pig :-
+  in_game(true),
+  atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'pig'),
   (   Count == 0 ->
@@ -190,6 +217,9 @@ pig :-
       updateQuestWhenGetProductFromAnimal(Count)
   ),
   addTime.
+pig :-
+  !,
+  write('You can call pig command only if you are at ranch.').
 
 /* Setiap melakukan aktivitas */
 updateProcessRanch :-
