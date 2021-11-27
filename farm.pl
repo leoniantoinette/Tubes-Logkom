@@ -90,6 +90,11 @@ dig :-
         )
     ).
 
+haveSeed :-
+    (inventory(12,'carrot seed',_,_,_,_,_,P), P > 0, !);
+    (inventory(13,'corn seed',_,_,_,_,_,Q), Q > 0, !);
+    (inventory(14,'tomato seed',_,_,_,_,_,R), R > 0).
+
 /* metode untuk melakukan plant/penanaman */
 plant :-
     in_game(false),
@@ -109,6 +114,8 @@ plant :-
     (P == tomato_plant) -> write('tomato ')),
     write('here!\n').
 plant :-
+    \+haveSeed, !, write('You don\'t have any seeds. Go to the market and buy some.\n').
+plant :-
     posisi(X,Y),
     write('You have : \n'),
     forall((inventory(_,Name,barang,farming,_,_,buy,Count)),
@@ -117,25 +124,25 @@ plant :-
     write('> '),
     read(In),
     (
-        In = 'carrot' ->
+        In = 'carrot',
         inventory(_,'carrot seed',_,_,_,_,_,Count),
-        Count > 0,
+        Count > 0 ->
         reduceInventory('carrot seed',1),
         assertz(crop_stat(carrot_plant, X, Y, 0)),
         updateFarmExp,
         addTime,
         write('You planted a carrot seed.\n'), !
-    ;   In = 'corn' ->
+    ;   In = 'corn',
         inventory(_,'corn seed',_,_,_,_,_,Count),
-        Count > 0,
+        Count > 0 ->
         reduceInventory('corn seed',1),
         assertz(crop_stat(corn_plant, X, Y, 0)),
         updateFarmExp,
         addTime,
         write('You planted a corn seed.\n'), !
-    ;   In = 'tomato' ->
+    ;   In = 'tomato',
         inventory(_,'tomato seed',_,_,_,_,_,Count),
-        Count > 0,
+        Count > 0 ->
         reduceInventory('tomato seed',1),
         assertz(crop_stat(tomato_plant, X, Y, 0)),
         updateFarmExp,
