@@ -248,6 +248,11 @@ readAll(S,[X|L]) :-
 
 /* startGame */
 startGame :-
+  in_game(true),
+  !,
+  write('You have started this game').
+startGame :-
+	!,
   write('  _                               _'), nl,
   write(' | |__   __ _ _ ____   _____  ___| |_'), nl,
   write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
