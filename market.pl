@@ -24,6 +24,7 @@ shop(Item,bought) :-
 	    )
 	;   (Item == 1 ; Item == 2 ; Item == 3 ; Item == 4 ; Item == 5 ; Item == 6) ->
             write('How many do you want to buy?'),nl,
+			write('> '),
 	    read(Amount),
 	    (	Item == 1 ->
 	        addInventory('carrot seed',Amount),

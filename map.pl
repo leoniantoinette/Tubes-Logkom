@@ -32,7 +32,7 @@ pos_fishing(10,3).
 pos_fishing(10,4).
 pos_fishing(10,5).
 
-map :- in_game(true), !, drawMap.
+map :- in_game(true), !, drawMap, displaytime.
 map :- !, write('You haven\'t started the game! Try using \'start.\' to start the game.').
 
 isBorder(X,Y) :- 

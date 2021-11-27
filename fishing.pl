@@ -1,7 +1,3 @@
-%TODO:
-%nambahin_exp
-%update quest
-
 /* Mendapatkan level equipment Fishing Rod */
 getLevelFishingRod(LevelFishingRod):-
     inventory(2,_,_,_,_,_,_,Level),

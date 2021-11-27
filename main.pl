@@ -25,6 +25,7 @@
 :- include('market.pl').
 :- include('house.pl').
 :- include('quest.pl').
+:- include('time.pl').
 
 
 in_game(false).

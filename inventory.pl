@@ -94,7 +94,7 @@ throwItem:-
     write('What do you want to throw?'), nl,
     write('> '),
     read(Name),
-    (   Name == 'shovel' ; Name == 'fishing rod' ->
+    (   Name = 'shovel' ; Name = 'fishing rod' ->
         write('You can`t throw it away because it`s your equipment!')
     ;   getCountBarang(Name,Count),
         format('You have ~w ~w. How many do you want to throw?', [Count,Name]), nl,
