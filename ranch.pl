@@ -169,7 +169,7 @@ chicken :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'chicken'),
   (   Count == 0 ->
-      write('Your cow hasn\'t produced any egg.'), nl,
+      write('Your chicken hasn\'t produced any egg.'), nl,
       write('Please check again later.')
   ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
       format('You got ~w eggs! ~n',[Count]),
@@ -182,9 +182,9 @@ pig :-
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'pig'),
   (   Count == 0 ->
-      write('Your cow hasn\'t produced any bacon.'), nl,
+      write('Your pig hasn\'t produced any bacon.'), nl,
       write('Please check again later.')
-  ;   format('Your chicken has produced ~w bacons. ~n',[Count]),
+  ;   format('Your pig has produced ~w bacons. ~n',[Count]),
       format('You got ~w bacons! ~n',[Count]),
       updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)

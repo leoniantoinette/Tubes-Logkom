@@ -51,9 +51,25 @@ my_quest :-
   !,
   quest(X,Y,Z,_,_),
   write('You need to collect:'), nl,
-  format('- ~w harvest item ~n',[X]),
-  format('- ~w fish ~n',[Y]),
-  format('- ~w animal product ~n',[Z]).
+  writeQuestHarvest(X),
+  writeQuestFish(Y),
+  writeQuestProduct(Z).
+
+writeQuestHarvest(X) :-
+  X > 0,
+  !,
+  format('- ~w harvest item ~n',[X]).
+writeQuestHarvest(_) :- !.
+writeQuestFish(X) :-
+  X > 0,
+  !,
+  format('- ~w fish ~n',[X]).
+writeQuestFish(_) :- !.
+writeQuestProduct(X) :-
+  X > 0,
+  !,
+  format('- ~w animal product ~n',[X]).
+writeQuestProduct(_) :- !.
 
 updateQuestWhenHaverst :-
   in_game(true),

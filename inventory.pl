@@ -160,7 +160,7 @@ throwItem:-
             )
         )
     ;   write('Your input is invalid! Provide input with item names based on items listed above!')
-    ).
+    ), !.
 
 
 

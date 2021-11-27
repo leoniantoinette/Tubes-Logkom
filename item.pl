@@ -6,7 +6,7 @@
 
 /* Equipments untuk Player (dapat dibeli untuk meningkatkan level) */
 item(1, 'shovel', equipment, farming,  300, true, buy).
-item(2, 'fishing rod', equipment, fishing, 300, true, buy).
+item(2, 'fishing rod', equipment, fishing, 500, true, buy).
 
 /* Barang untuk Player*/
 

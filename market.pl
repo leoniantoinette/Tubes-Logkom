@@ -109,7 +109,7 @@ buy :-
 	write('* Input exitShop if you\'re done shopping'), nl,
 	write('> '),
 	read(Item),
-	shop(Item,bought).
+	shop(Item,bought), !.
 buy :-
 	!,
 	write('You can call buy command only if you are at market.'),nl.
