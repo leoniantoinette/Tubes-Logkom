@@ -93,17 +93,20 @@ throwItem:-
     writeInventory(Name, ListType, Count), nl,
     write('What do you want to throw?'), nl,
     write('> '),
-    read(Name),
-    (   Name = 'shovel' ; Name = 'fishing rod' ->
-        write('You can`t throw it away because it`s your equipment!')
-    ;   getCountBarang(Name,Count),
-        format('You have ~w ~w. How many do you want to throw?', [Count,Name]), nl,
+    read(User_input),
+    inventory(_,User_input,Type,_,_,_,_,_),
+    (   Type == equipment ->
+        write('You can\'t throw it away because it\'s your equipment!')
+    ;   
+        Type == barang -> 
+        getCountBarang(User_input,Amount),
+        format('You have ~w ~w. How many do you want to throw?', [Amount,User_input]), nl,
         write('> '),
         read(Reduce),
-        (   (Reduce < Count) ->
-            reduceInventory(Name,Reduce),
-            format('You threw away ~w ~w.', [Count,Name]), nl
-         ;  format('You don`t have enough ~w. Cancelling...', [Name]), nl
+        (   (Reduce < Amount) ->
+            reduceInventory(User_input,Reduce),
+            format('You threw away ~w ~w.', [Reduce,User_input]), nl
+         ;  format('You don\'t have enough ~w. Cancelling...', [User_input]), nl
         )
     ).
 
