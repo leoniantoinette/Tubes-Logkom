@@ -2,11 +2,14 @@
 %handle user input
 
 checkLevelEquipment(Name):-
-	inventory(_,Name,_,_,_,_,_,Level),
+	inventory(_,Name,_,_,Price,_,_,Level),
 	(   Level >= 3 ->
 	    write('You can`t level up your equipment anymore because it`s already reached its maximum!')
 	;   addInventory(Name,1),
-	    write('Yeay, your shovel equipment level has increased~'),nl
+	    format('Yeay, your ~? equipment level has increased ~n', [Name]),
+			retract(gold(Money)),
+			Currentmoney is Money - Price,
+			assertz(gold(Currentmoney))
 	).
 
 shop('exitShop',_) :-
