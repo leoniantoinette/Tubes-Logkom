@@ -1,3 +1,7 @@
+/* To Do :
+    tambahin batas untuk naik level
+    */
+
 :- dynamic(crop_stat/4).
 /* lokasi dan umur crop
  * crop_stat(plant, absis, ordinat, age)
@@ -49,10 +53,13 @@ dig :-
         write('You can\'t dig on quest headquarters\n'), !
     ;   pos_ranch(X,Y) ->
         write('You can\'t dig on ranch!\n'), !
-    ;   (
+    ;   
+        pos_digged(X,Y) ->
+        write('This tile is digged!\n'), !
+    ;
+        (
             assertz(pos_digged(X,Y)),
             write('You digged the tile.'),
-            updateFarmExp,
             addTime
         )
     ).
@@ -67,6 +74,14 @@ plant :-
     in_game(true),
     posisi(X,Y),
     \+pos_digged(X,Y), !, write('The tile is not digged yet.').
+plant :- 
+    posisi(X,Y),
+    crop_stat(P,X,Y,_), !, 
+    write('You have planted '),
+    ((P == carrot_plant) -> write('carrot ');
+    (P == corn_plant) -> write('corn ');
+    (P == tomato_plant) -> write('tomato ')),
+    write('here!\n').
 plant :-
     posisi(X,Y),
     write('You have : \n'),
@@ -110,8 +125,11 @@ harvestCarrot :-
     (   W >= 56 ->
         write('You harvested carrot.\n'),
         retract(crop_stat(carrot_plant,X,Y,W)),
-        addInventory('carrot',1)
-    ;   write('Your carrot is not ready to be harvested yet!\n')
+        addInventory('carrot',1),
+        updateFarmExp,
+        !
+    ;   write('Your carrot is not ready to be harvested yet!\n'),
+        !
     ).
 
 harvestCorn :-
@@ -120,8 +138,11 @@ harvestCorn :-
     (   V >= 48 ->
         write('You harvested corn.\n'),
         retract(crop_stat(corn_plant,X,Y,V)),
-        addInventory('corn',1)
-    ;   write('Your corn is not ready to be harvested yet!\n')
+        addInventory('corn',1),
+        updateFarmExp,
+        !
+    ;   write('Your corn is not ready to be harvested yet!\n'),
+        !
     ).
 
 harvestTomato :-
@@ -130,8 +151,11 @@ harvestTomato :-
     (   A >= 80 ->
         write('You harvested tomato.\n'),
         retract(crop_stat(tomato_plant,X,Y,A)),
-        addInventory('tomato',1)
-    ;   write('Your tomato is not ready to be harvested yet!\n')
+        addInventory('tomato',1),
+        updateFarmExp,
+        !
+    ;   write('Your tomato is not ready to be harvested yet!\n'),
+        !
     ).
 
 harvest :-
@@ -145,17 +169,14 @@ harvest :-
     (
         crop_stat(carrot_plant,X,Y,_) ->
         harvestCarrot,
-        updateFarmExp,
         updateQuestWhenHaverst,
         addTime
     ;   crop_stat(corn_plant,X,Y,_) ->
         harvestCorn,
-        updateFarmExp,
         updateQuestWhenHaverst,
         addTime
     ;   crop_stat(tomato_plant,X,Y,_) ->
         harvestTomato,
-        updateFarmExp,
         updateQuestWhenHaverst,
         addTime
     ;   write('There is no plant here.')
