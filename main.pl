@@ -91,7 +91,8 @@ initialize :-
   assertz(level_fishing(1)),
   assertz(level_ranching(1)),
   addInventory('shovel',1),
-  addInventory('fishing rod',1).
+  addInventory('fishing rod',1),
+  init_farm.
 
 /* chooseJob : untuk memilih job */
 chooseJob(Job_num) :-
@@ -265,6 +266,7 @@ updateLevelFarming :-
   LevelFarmingNew is LevelFarming ),
   assertz(exp_farming(ExpFarmingNew)),
   assertz(level_farming(LevelFarmingNew)),
+  update_harvestTime,
   ( ExpPemain >= 300
   -> ExpPemainNew is ExpPemain - 300,
   LevelPemainNew is LevelPemain + 1
