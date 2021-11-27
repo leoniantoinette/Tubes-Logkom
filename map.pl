@@ -32,7 +32,7 @@ pos_fishing(10,3).
 pos_fishing(10,4).
 pos_fishing(10,5).
 
-map :- in_game(true), !, drawMap, displaytime.
+map :- in_game(true), !, drawMap, nl, displaytime.
 map :- !, write('You haven\'t started the game! Try using \'start.\' to start the game.').
 
 isBorder(X,Y) :- 
@@ -52,14 +52,22 @@ drawPos(X,Y) :- isBorder(X,Y), !, write('#').
 drawPos(_,_) :- write('-'),!.
 
 drawMap :-
+  write('    MAP'), nl,
   mapSize(Row,Col),
   Rowborder1 is 0,
   Rowborder2 is Row + 1,
   Colborder1 is 0,
   Colborder2 is Col + 1,
   forall(between(Rowborder1,Rowborder2,X), (forall(between(Colborder1,Colborder2,Y), (drawPos(X,Y))),nl)),
+  write('Keterangan:'), nl,
+  write(' - P : Posisi pemain'), nl,
+  write(' - M : Marketplace'), nl,
+  write(' - H : House'), nl,
+  write(' - Q : Tempat pengambilan quest'), nl,
+  write(' - o : Danau'), nl,
+  write(' - = : Digged tile'), nl,
   !.
-/* referensi: https://learnxinyminutes.com/docs/prolog/ */
+/* referensi: https://learnxinyminutes.com/docs/prolog/ */    
 
 /* fungsi untuk mengetahui apakah player berada di lokasi tertentu */
 atHouse :- pos_house(X_house, Y_house), posisi(X, Y), X =:= X_house, Y =:= Y_house.
