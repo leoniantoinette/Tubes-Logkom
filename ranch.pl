@@ -22,7 +22,7 @@ updateRanchExp :-
     ).
 
 addTernakStatus(Name, Addition):-
-  inventory(2,_,_,_,_,_,_,Level),
+  level_ranching(Level),
   (   Name = 'cow' ->
       (   Level == 1 ->
           assertz(ternakStatus(Name,Addition,0,48))
@@ -30,6 +30,10 @@ addTernakStatus(Name, Addition):-
           assertz(ternakStatus(Name,Addition,0,44))
       ;   Level == 3 ->
           assertz(ternakStatus(Name,Addition,0,40))
+      ;   Level == 4 ->
+          assertz(ternakStatus(Name,Addition,0,36))
+      ;   Level == 5 ->
+          assertz(ternakStatus(Name,Addition,0,32))
       )
   ;   Name = 'chicken' ->
       (   Level == 1 ->
@@ -38,6 +42,10 @@ addTernakStatus(Name, Addition):-
           assertz(ternakStatus(Name,Addition,0,40))
       ;   Level == 3 ->
           assertz(ternakStatus(Name,Addition,0,36))
+      ;   Level == 4 ->
+          assertz(ternakStatus(Name,Addition,0,32))
+      ;   Level == 5 ->
+          assertz(ternakStatus(Name,Addition,0,28))
       )
   ;   Name = 'pig' ->
       (   Level == 1 ->
@@ -46,6 +54,10 @@ addTernakStatus(Name, Addition):-
           assertz(ternakStatus(Name,Addition,0,64))
       ;   Level == 3 ->
           assertz(ternakStatus(Name,Addition,0,60))
+      ;   Level == 4 ->
+          assertz(ternakStatus(Name,Addition,0,56))
+      ;   Level == 5 ->
+          assertz(ternakStatus(Name,Addition,0,52))
       )
   ).
 
