@@ -82,12 +82,24 @@ getCountBarang(NAME,Count):-
     ).
 
 inventory:-
+    in_game(false),
+	!,
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+	fail.
+inventory:-
+    in_game(true),
     totalInventory(Sum),
     format('Your inventory: (~w/100)', [Sum]), nl,
     makeListInventory(Name, ListType, Count),
     writeInventory(Name, ListType, Count).
 
 throwItem:-
+    in_game(false),
+	!,
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+	fail.
+throwItem:-
+    in_game(true),
     write('Your inventory'), nl,
     makeListInventory(Name, ListType, Count),
     writeInventory(Name, ListType, Count), nl,
