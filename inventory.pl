@@ -4,6 +4,10 @@
  * UNTUK TYPE = EQUIPMENT, LIST KE-8(_) BERUPA LEVEL
  */
 
+totalSellableItem(Sum):-
+    findall(Count, inventory(_,_,_,_,_,_,sell,Count),List),
+    sum_list(List,Sum).
+    
 totalInventoryWithoutEquipment(Sum):-
     findall(Count, inventory(_,_,barang,_,_,_,_,Count), List),
     sum_list(List,Sum).
@@ -100,27 +104,40 @@ throwItem:-
 	fail.
 throwItem:-
     in_game(true),
+    totalInventoryWithoutEquipment(Total),
+    Total == 0,
+    write('You have nothing to throw.'),nl,
+    !.
+throwItem:-
+    in_game(true),
+    totalInventoryWithoutEquipment(Total),
+    Total > 0,
     write('Your inventory'), nl,
-    makeListInventory(Name, ListType, Count),
-    writeInventory(Name, ListType, Count), nl,
+    makeListInventory(ItemName, ListType, Count),
+    writeInventory(ItemName, ListType, Count), nl,
     write('What do you want to throw?'), nl,
     write('> '),
     read(User_input),
-    inventory(_,User_input,Type,_,_,_,_,_),
-    (   Type == equipment ->
-        write('You can\'t throw it away because it\'s your equipment!')
-    ;   
-        Type == barang -> 
-        getCountBarang(User_input,Amount),
-        format('You have ~w ~w. How many do you want to throw?', [Amount,User_input]), nl,
-        write('> '),
-        read(Reduce),
-        (   (Reduce < Amount) ->
-            reduceInventory(User_input,Reduce),
-            format('You threw away ~w ~w.', [Reduce,User_input]), nl
-         ;  format('You don\'t have enough ~w. Cancelling...', [User_input]), nl
+    findall(Name, inventory(_,Name,_,_,_,_,_,_), ListName),
+    (   isNameInventory(User_input,ListName) ->
+        inventory(_,User_input,Type,_,_,_,_,_),
+        (   Type == equipment ->
+            write('You can\'t throw it away because it\'s your equipment!')
+        ;   
+            Type == barang -> 
+            getCountBarang(User_input,Amount),
+            format('You have ~w ~w. How many do you want to throw?', [Amount,User_input]), nl,
+            write('> '),
+            read(Reduce),
+            (   (Reduce < Amount) ->
+                reduceInventory(User_input,Reduce),
+                format('You threw away ~w ~w.', [Reduce,User_input]), nl
+            ;  format('You don\'t have enough ~w. Cancelling...', [User_input]), nl
+            )
         )
+    ;   write('Your input is invalid! Provide input with item names based on items listed above!')
     ).
+
 
 
 
