@@ -31,6 +31,221 @@
 
 in_game(false).
 
+save(_) :-
+	in_game(false),
+	write('Unable to save because the game hasn\'t started yet!'), nl,
+	write('You have to give startGame command to start the game first'), nl, !.
+save(FileName) :-
+	tell(FileName),
+                writeStatGame,
+		writeInventory,
+		writeCropStat,
+		writePosisi,
+		writeDay,
+		writeTime,
+		writeGold,
+		writeExpPemain,
+                writeExpFarming,
+                writeExpFishing,
+                writeExpRanching,
+                writeFisherman,
+                writeFarmer,
+                writeRancher,
+		writeLevelPemain,
+                writeLevelFarming,
+                writeLevelFishing,
+                writeLevelRanching,
+		writeListDiary,
+		writePosDigged,
+		writeQuest,
+	told, !.
+
+writeStatGame:-
+        in_game(Stat),
+        write('in_game('),
+        write(Stat), write(').'),nl.
+
+writeInventory:-
+	\+inventory(_,_,_,_,_,_,_,_),
+	!.
+writeInventory :-
+	forall(inventory(ID, Name, Type, Role, Price, IsInventory, StatusMarket, Count),
+               (
+                   write('inventory('),
+                   write(ID), write(', '),
+                   write('\''), write(Name), write('\''), write(', '),
+                   write(Type), write(', '),
+                   write(Role), write(', '),
+                   write(Price), write(', '),
+                   write(IsInventory), write(', '),
+                   write(StatusMarket), write(', '),
+                   write(Count), write(').'), nl
+               )
+              ),
+        !.
+writeCropStat:-
+        \+crop_stat(_,_,_,_),
+        !.
+writeCropStat:-
+        forall(crop_stat(Plant, Absis, Ordinat, Age),
+               (
+                   write('inventory('),
+                   write(Plant), write(', '),
+                   write(Absis), write(', '),
+                   write(Ordinat), write(', '),
+                   write(Age), write(').'), nl
+               )
+              ),
+        !.
+
+writePosisi:-
+        posisi(X,Y),
+        write('posisi('),
+        write(X), write(', '),
+        write(Y), write(').'), nl.
+
+writeDay:-
+        day(A),
+        write('day('),
+        write(A), write(').'), nl.
+
+writeTime:-
+        time(T),
+        write('time('),
+        write(T), write(').'), nl.
+
+writeGold:-
+        gold(G),
+        write('gold('),
+        write(G), write(').'), nl.
+
+writeExpPemain:-
+        exp_pemain(XP),
+        write('exp_pemain('),
+        write(XP), write(').'), nl.
+
+writeExpFarming:-
+        exp_farming(XP),
+        write('exp_farming('),
+        write(XP), write(').'), nl.
+
+writeExpFishing:-
+        exp_fishing(XP),
+        write('exp_fishing('),
+        write(XP), write(').'), nl.
+
+writeExpRanching:-
+        exp_ranching(XP),
+        write('exp_ranching('),
+        write(XP), write(').'), nl.
+
+writeFisherman:-
+        fisherman(STAT),
+        write('fisherman('),
+        write(STAT), write(').'), nl.
+
+writeFarmer:-
+        farmer(STAT),
+        write('farmer('),
+        write(STAT), write(').'), nl.
+
+writeRancher:-
+        rancher(STAT),
+        write('rancher('),
+        write(STAT), write(').'), nl.
+
+writeLevelPemain:-
+        level_pemain(LVL),
+        write('level_pemain('),
+        write(LVL), write(').'), nl.
+
+writeLevelFarming:-
+        level_farming(LVL),
+        write('level_farming('),
+        write(LVL), write(').'), nl.
+
+writeLevelFishing:-
+        level_fishing(LVL),
+        write('level_fishing('),
+        write(LVL), write(').'), nl.
+
+writeLevelRanching:-
+        level_ranching(LVL),
+        write('level_ranching('),
+        write(LVL), write(').'), nl.
+
+writeListDiary:-
+        \+diary(_,_),
+        !.
+writeListDiary:-
+        forall(diary(Day, Text),
+               (
+                   write('diary('),
+                   write(Day), write(', '),
+                   write(Text), write(').'), nl
+               )
+              ),
+        !.
+
+writePosDigged:-
+        \+pos_digged(_,_),
+        !.
+writePosDigged:-
+        forall(pos_digged(X, Y),
+               (
+                   write('pos_digged('),
+                   write(X), write(', '),
+                   write(Y), write(').'), nl
+               )
+              ),
+        !.
+
+writeQuest:-
+        in_quest(Stat),
+        (   Stat == true ->
+            write('in_quest('),
+            write(Stat), write(').'),nl,
+            quest(X,Y,Z,Exp,Gold),
+            forall(quest(X,Y,Z,Exp,Gold),
+                   (   write('quest('),
+                       write(X), write(', '),
+                       write(Y), write(', '),
+                       write(Z), write(', '),
+                       write(Exp), write(', '),
+                       write(Gold), write(').'), nl
+                   )
+                  )
+        ;   write('in_quest('),
+            write(Stat), write(').'),nl
+        ).
+
+loadFile(_) :-
+        in_game(true),
+	write('Unable to load because the game has started!'), nl, !.
+loadFile(FileName):-
+	\+file_exists(FileName),
+	write('File not found!'), nl, !.
+loadFile(FileName):-
+	open(FileName, read, S),
+        readAll(S,Lines),
+        close(S),
+        assertAll(Lines),
+        retract(in_game(false)),
+	write('WELCOME BACK!'),nl,
+	map, !.
+
+assertAll([]) :- !.
+assertAll([X|L]):-
+	asserta(X),
+	assertAll(L), !.
+
+readAll(S,[]) :-
+    at_end_of_stream(S).
+readAll(S,[X|L]) :-
+    \+ at_end_of_stream(S),
+    read(S,X),
+    readAll(S,L).
+
 /* startGame */
 startGame :-
   write('  _                               _'), nl,
