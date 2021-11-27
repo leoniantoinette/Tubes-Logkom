@@ -62,6 +62,7 @@ drawMap :-
   write('Keterangan:'), nl,
   write(' - P : Posisi pemain'), nl,
   write(' - M : Marketplace'), nl,
+  write(' - R : Ranch'), nl,
   write(' - H : House'), nl,
   write(' - Q : Tempat pengambilan quest'), nl,
   write(' - o : Danau'), nl,
