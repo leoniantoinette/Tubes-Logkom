@@ -1,3 +1,5 @@
+%TODO:
+%handle user input
 :- dynamic(inventory/8).
 /* Format Berupa item(ID, Name, Type, Role, Price, isInventory, _)
  * UNTUK TYPE = BARANG, LIST KE-8 (_) BERUPA COUNT
@@ -31,7 +33,17 @@ writeInventory([A|W], [B|X], [C|Y]):-
         write('1 Level '), write(C), write(' '), write(A), nl,
         writeInventory(W,X,Y)
     ;   (B == barang) ->
-        write(C), write(' '), write(A), nl,
+        write(C), 
+        write(' '), 
+        (   C>1 ->
+            plural(A, A1),
+            capitalize(A1,A2),
+            write(A2)
+        ;
+            C == 1 ->
+            capitalize(A,A1),
+            write(A1)
+        ),nl,
         writeInventory(W,X,Y)
     ;   writeInventory(W,X,Y)
     ).
@@ -126,12 +138,24 @@ throwItem:-
         ;   
             Type == barang -> 
             getCountBarang(User_input,Amount),
-            format('You have ~w ~w. How many do you want to throw?', [Amount,User_input]), nl,
+            (
+                Amount > 1 -> 
+                plural(User_input,FixedName),
+                format('You have ~w ~w. How many do you want to throw? ~n ', [Amount,FixedName])
+            ;
+                format('You have ~w ~w. How many do you want to throw? ~n', [Amount,User_input])
+            ),
             write('> '),
             read(Reduce),
-            (   (Reduce < Amount) ->
+            (   (Reduce =< Amount) ->
                 reduceInventory(User_input,Reduce),
-                format('You threw away ~w ~w.', [Reduce,User_input]), nl
+                (
+                    Reduce > 1 -> 
+                    plural(User_input,FixedName),
+                    format('You threw away ~w ~w. ~n', [Reduce,FixedName])
+                ;
+                    format('You threw away ~w ~w. ~n', [Reduce,User_input])
+                )
             ;  format('You don\'t have enough ~w. Cancelling...', [User_input]), nl
             )
         )

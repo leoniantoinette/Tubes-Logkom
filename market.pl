@@ -1,9 +1,5 @@
 %TODO:
-%handle_max_level_equipment
-%handle_input_amount_bukan_integer
-%handle_inventory_penuh
-%pake_gold
-%masukin_time
+%handle user input
 
 checkLevelEquipment(Name):-
 	inventory(_,Name,_,_,_,_,_,Level),
@@ -30,55 +26,41 @@ shop(Item,bought) :-
 		item(ItemID,_,_,_,Price,_,_),
 		Totalprice is Price*Amount,
 		gold(Money),
-	    (	Item == 1, Money >= Totalprice  ->
-	        addInventory('carrot seed',Amount),
-                format('You have bought ~w carrot seed. ~n',[Amount]),
+	    (	Item >= 1, Item =< 3, Money >= Totalprice  ->
+			item(ItemID,ItemName,_,_,_,_,_),
+	        addInventory(ItemName,Amount),
+				(
+					Amount > 1 ->
+					plural(ItemName,FixedName),
+					format('You have bought ~w ~w. ~n',[Amount, FixedName])
+				;
+					format('You have bought ~w ~w. ~n',[Amount, ItemName])
+				),
 				format('You are charged ~w golds. ~n ~n',[Totalprice]),
 				retract(gold(Money)),
 				Currentmoney is Money - Totalprice,
 				assertz(gold(Currentmoney))
-	    ;	Item == 2, Money >= Totalprice->
-	        addInventory('corn seed',Amount),
-                format('You have bought ~w corn seed.~n',[Amount]),
-				format('You are charged ~w golds. ~n ~n',[Totalprice]),
-				retract(gold(Money)),
-				Currentmoney is Money - Totalprice,
-				assertz(gold(Currentmoney))
-	    ;	Item == 3, Money >= Totalprice ->
-	        addInventory('tomato seed',Amount),
-                format('You have bought ~w tomato seed.~n',[Amount]),
-				format('You are charged ~w golds.~n ~n',[Totalprice]),
-				retract(gold(Money)),
-				Currentmoney is Money - Totalprice,
-				assertz(gold(Currentmoney))
-	    ;	Item == 4, Money >= Totalprice ->
-	        addTernakStatus('cow',Amount),
-                format('You have bought ~w cow. ~n ',[Amount]),
-				format('You are charged ~w golds. ~n',[Totalprice]),
-	        	write('Your cow is already on the ranch '),nl,nl,
-				retract(gold(Money)),
-				Currentmoney is Money - Totalprice,
-				assertz(gold(Currentmoney))
-	    ;	Item == 5, Money >= Totalprice ->
-	        addTernakStatus('chicken',Amount),
-                format('You have bought ~w chicken. ~n',[Amount]),
-				format('You are charged ~w golds. ~n',[Totalprice]),
-				write('Your chicken is already on the ranch'),nl,nl,
-				retract(gold(Money)),
-				Currentmoney is Money - Totalprice,
-				assertz(gold(Currentmoney))
-	    ;   Item == 6, Money >= Totalprice ->
-			addTernakStatus('pig',Amount),
-                format('You have bought ~w pig ~n.',[Amount]),
-				format('You are charged ~w golds. ~n',[Totalprice]),
-				write('Your pig is already on the ranch'),nl,nl,
+	    ;	Item >= 4, Item=<6, Money >= Totalprice ->
+			item(ItemID,ItemName,_,_,_,_,_),
+	        addTernakStatus(ItemName,Amount),
+				(
+					Amount > 1 ->
+					plural(ItemName,FixedName),
+					format('You have bought ~w ~w. ~n',[Amount, FixedName]),
+					format('You are charged ~w golds. ~n',[Totalprice]),
+	        		format('Your ~w is already on the ranch. ~n ~n ', [FixedName])
+				;
+					format('You have bought ~w ~w. ~n',[Amount, ItemName]),
+					format('You are charged ~w golds. ~n',[Totalprice]),
+	        		format('Your ~w is already on the ranch. ~n ~n ',[ItemName])
+				),
 				retract(gold(Money)),
 				Currentmoney is Money - Totalprice,
 				assertz(gold(Currentmoney))
 		;
 		format('You don\'t have enough money. Your money now is ~w golds ~n ~n', [Money])
         )
-        ;   write('Your input is invalid! Provide input with numbers based on the numbers listed on the market! or input exitShop if you want to exit ~n'),nl
+        ;   write('Your input is invalid! Provide input with numbers based on the numbers listed on the market! or input exitShop if you want to exit'),nl,nl
 	),
 	buy.
 shop(Item,forsale) :-
@@ -88,23 +70,29 @@ shop(Item,forsale) :-
 	    write('How many do you want to sell?'),nl,
 		write('> '),
 	    read(Amount),
-	    (	Amount < Count ->
+	    (	Amount =< Count ->
 	        reduceInventory(Item,Amount),
-	        format('You sold ~w ~w. ~n', [Amount,Item]),
+			(
+				Amount > 1 ->
+				plural(Item, FixedName),
+				format('You sold ~w ~w. ~n', [Amount,FixedName])
+			;
+				format('You sold ~w ~w. ~n', [Amount,Item])
+			),
 			PriceTotal is Price*Amount,
-			format('You received ~w golds.~n', [PriceTotal]),
+			format('You received ~w golds.~n ~n', [PriceTotal]),
 			retract(gold(Money)),
 			Currentmoney is Money + PriceTotal,
 			assertz(gold(Currentmoney))
-	    ;	format('You don\'t have enough ~w to sell.~n',[Item])
+	    ;	format('You don\'t have enough ~w to sell.~n ~n',[Item])
 	    )
-	;   write('Your input is invalid! Provide input with item names based on items listed on the market! or enter exitShop if you want to exit'),nl
+	;   write('Your input is invalid! Provide input with item names based on items listed on the market! or enter exitShop if you want to exit'),nl,nl
 	),
 	sell.
 
 buy :-
 	in_game(false),!,
-	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),nl,
 	fail.
 buy :-
 	in_game(true),
@@ -123,7 +111,7 @@ buy :-
 	shop(Item,bought).
 buy :-
 	!,
-	write('You can call buy command only if you are at market.').
+	write('You can call buy command only if you are at market.'),nl.
 
 makeListSell(ListName, ListCount):-
     findall(Name, inventory(_,Name,_,_,_,true,sell,_), ListName),
@@ -131,12 +119,24 @@ makeListSell(ListName, ListCount):-
 
 displayListSell([], []).
 displayListSell([A|W], [B|X]):-
-	write('-   '), write(B), write(' '), write(A), nl,
+	write('-   '),
+	write(B),
+	write(' '),
+	(
+		B > 1 ->
+		plural(A, A1),
+		capitalize(A1,A2),
+		write(A2) 
+	;
+		B == 1 ->
+		capitalize(A,A1),
+		write(A1)
+	),nl,
         displayListSell(W,X).
 
 sell :-
 	in_game(false),!,
-	write('You haven\'t started the game! Try using \'start.\' to start the game.'),
+	write('You haven\'t started the game! Try using \'start.\' to start the game.'),nl,
 	fail.
 sell :-
 	in_game(true),
@@ -150,11 +150,11 @@ sell :-
 		write('> '),
 		read(Item),
 		shop(Item,forsale)
-	;	write('You have nothing to sell.'),nl
+	;	write('You have nothing to sell.'),nl,nl
 	).
 sell :-
 	!,
-	write('You can call sell command only if you are at market.').
+	write('You can call sell command only if you are at market.'),nl.
 
 market :-
 	in_game(false),
@@ -188,4 +188,4 @@ market :-
         ).
 market :-
 	!,
-	write('You can call market command only if you are at market place.').
+	write('You can call market command only if you are at market place.'),nl.

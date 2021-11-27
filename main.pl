@@ -27,7 +27,7 @@
 :- include('house.pl').
 :- include('quest.pl').
 :- include('time.pl').
-
+:- include('grammar.pl').
 
 in_game(false).
 
