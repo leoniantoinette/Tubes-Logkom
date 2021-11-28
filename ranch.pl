@@ -159,6 +159,7 @@ cow :-
       write('Your cow hasn\'t produced any milk.'), nl,
       write('Please check again later.')
   ;   format('Your cow has produced ~w milks. ~n',[Count]),
+      addInventory('milk',Count),
       format('You got ~w milks! ~n',[Count]),
       updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
@@ -182,6 +183,7 @@ chicken :-
       write('Your chicken hasn\'t produced any egg.'), nl,
       write('Please check again later.')
   ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
+      addInventory('egg',Count),
       format('You got ~w eggs! ~n',[Count]),
       updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
@@ -205,6 +207,7 @@ pig :-
       write('Your pig hasn\'t produced any bacon.'), nl,
       write('Please check again later.')
   ;   format('Your pig has produced ~w bacons. ~n',[Count]),
+      addInventory('bacon',Count),
       format('You got ~w bacons! ~n',[Count]),
       updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
