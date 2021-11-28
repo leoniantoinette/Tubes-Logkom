@@ -71,7 +71,7 @@ updateTernakStatus([A|W], [B|X]):-
    retract(ternakStatus(A,B,TProcess,TDeadline)),
    TProcessNew is TProcess+1,
    assertz(ternakStatus(A,B,TProcessNew,TDeadline)),
-   updateTernakStatus(W,X,StatusProcess, StatusLevel).
+   updateTernakStatus(W,X).
 
 totalOnTheRanch([], [], 0, 0, 0).
 totalOnTheRanch([A|W], [B|X], CountCow, CountChicken, CountPig):-
