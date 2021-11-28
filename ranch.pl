@@ -65,21 +65,13 @@ makeListRanch(ListName, ListCount):-
     findall(Name, ternakStatus(Name,_,_,_), ListName),
     findall(Count, ternakStatus(_,Count,_,_), ListCount).
 
-updateTernakStatus([],[],_,_):- !.
-updateTernakStatus([A|W], [B|X], StatusProcess, StatusLevel):-
-  (   StatusProcess == true ->
-      ternakStatus(A,B,TProcess,TDeadline),
-      retract(ternakStatus(A,B,TProcess,TDeadline)),
-      TProcessNew is TProcess+1,
-      assertz(ternakStatus(A,B,TProcessNew,TDeadline)),
-      updateTernakStatus(W,X,StatusProcess, StatusLevel)
-  ;   StatusLevel == true ->
-      ternakStatus(A,B,TProcess,TDeadline),
-      retract(ternakStatus(A,B,TProcess,TDeadline)),
-      TDeadlineNew is TDeadline-4,
-      assertz(ternakStatus(A,B,TProcess,TDeadlineNew)),
-      updateTernakStatus(W,X,StatusProcess, StatusLevel)
-  ).
+updateTernakStatus([],[]):- !.
+updateTernakStatus([A|W], [B|X]):-
+   ternakStatus(A,B,TProcess,TDeadline),
+   retract(ternakStatus(A,B,TProcess,TDeadline)),
+   TProcessNew is TProcess+1,
+   assertz(ternakStatus(A,B,TProcessNew,TDeadline)),
+   updateTernakStatus(W,X,StatusProcess, StatusLevel).
 
 totalOnTheRanch([], [], 0, 0, 0).
 totalOnTheRanch([A|W], [B|X], CountCow, CountChicken, CountPig):-
@@ -104,6 +96,7 @@ checkWhoCanBeTaken([A|W], [B|X], [C|Y], Count, Name):-
     (   A == Name ->
         (   B > C ->
             retract(ternakStatus(A,Amount,B,C)),
+	    addTernakStatus(A,Amount),
             checkWhoCanBeTaken(W,X,Y,CountCurrent,Name),
             Count is CountCurrent+Amount
         ;   checkWhoCanBeTaken(W,X,Y,Count,Name)
@@ -224,4 +217,4 @@ pig :-
 /* Setiap melakukan aktivitas */
 updateProcessRanch :-
   makeListRanch(ListName, ListCount),
-  updateTernakStatus(ListName, ListCount, true, false),!.
+  updateTernakStatus(ListName, ListCount),!.
