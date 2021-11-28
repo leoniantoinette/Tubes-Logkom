@@ -36,3 +36,25 @@ capitalize('corn seeds','Corn seeds').
 capitalize('corn seed','Corn seed').
 capitalize('tomato seed', 'Tomato seed').
 capitalize('tomato seeds', 'Tomato seeds').
+
+fixedUserInput('carrot', 'carrot').
+fixedUserInput('carrots', 'carrot').
+fixedUserInput('corn', 'corn').
+fixedUserInput('corns', 'corn').
+fixedUserInput('tomato','tomato').
+fixedUserInput('tomatoes', 'tomato').
+fixedUserInput('salmon', 'salmon').
+fixedUserInput('tuna','tuna').
+fixedUserInput('tunas','tuna').
+fixedUserInput('trout','trout').
+fixedUserInput('milk','milk').
+fixedUserInput('egg','egg').
+fixedUserInput('eggs','egg').
+fixedUserInput('bacon','bacon').
+fixedUserInput('bacons', 'bacon').
+fixedUserInput('carrot seed', 'carrot seed').
+fixedUserInput('carrot seeds', 'carrot seed').
+fixedUserInput('corn seeds','corn seed').
+fixedUserInput('corn seed','corn seed').
+fixedUserInput('tomato seed', 'tomato seed').
+fixedUserInput('tomato seeds', 'tomato seed').

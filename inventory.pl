@@ -130,33 +130,34 @@ throwItem:-
     write('What do you want to throw?'), nl,
     write('> '),
     read(User_input),
+    fixedUserInput(User_input,Fixed),
     findall(Name, inventory(_,Name,_,_,_,_,_,_), ListName),
-    (   isNameInventory(User_input,ListName) ->
-        inventory(_,User_input,Type,_,_,_,_,_),
+    (   isNameInventory(Fixed,ListName) ->
+        inventory(_,Fixed,Type,_,_,_,_,_),
         (   Type == equipment ->
             write('You can\'t throw it away because it\'s your equipment!')
         ;   
             Type == barang -> 
-            getCountBarang(User_input,Amount),
+            getCountBarang(Fixed,Amount),
             (
                 Amount > 1 -> 
-                plural(User_input,FixedName),
+                plural(Fixed,FixedName),
                 format('You have ~w ~w. How many do you want to throw? ~n ', [Amount,FixedName])
             ;
-                format('You have ~w ~w. How many do you want to throw? ~n', [Amount,User_input])
+                format('You have ~w ~w. How many do you want to throw? ~n', [Amount,Fixed])
             ),
             write('> '),
             read(Reduce),
             (   (Reduce =< Amount) ->
-                reduceInventory(User_input,Reduce),
+                reduceInventory(Fixed,Reduce),
                 (
                     Reduce > 1 -> 
-                    plural(User_input,FixedName),
+                    plural(Fixed,FixedName),
                     format('You threw away ~w ~w. ~n', [Reduce,FixedName])
                 ;
-                    format('You threw away ~w ~w. ~n', [Reduce,User_input])
+                    format('You threw away ~w ~w. ~n', [Reduce,Fixed])
                 )
-            ;  format('You don\'t have enough ~w. Cancelling...', [User_input]), nl
+            ;  format('You don\'t have enough ~w. Cancelling...', [Fixed]), nl
             )
         )
     ;   write('Your input is invalid! Provide input with item names based on items listed above!')

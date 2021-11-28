@@ -275,13 +275,7 @@ startGame :-
   write('**************************************************************').
 
 /* start */
-start :-
-  in_game(true),
-  !,
-  write('You have started this game').
-start :-
-  !,
-  initialize,
+jobList :- 
   write('Welcome to Harvest Star. Choose your job'), nl,
   write('1. Fisherman'), nl,
   write('2. Farmer'), nl,
@@ -290,6 +284,15 @@ start :-
   read(Num),
   !,
   chooseJob(Num).
+
+start :-
+  in_game(true),
+  !,
+  write('You have started this game').
+start :-
+  !,
+  initialize,
+  jobList.
 
 /* initialize */
 initialize :-
@@ -339,7 +342,8 @@ chooseJob(Job_num) :-
   write('Let\'s start ranching!').
 chooseJob(_) :-
   !,
-  write('Please input the valid number').
+  write('Please input the valid number'),nl,nl,
+  jobList.
 
 /* quit untuk keluar dari game */
 quit :-

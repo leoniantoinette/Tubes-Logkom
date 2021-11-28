@@ -154,7 +154,8 @@ sell :-
 		write('* Input exitShop if you\'re done'), nl,
 		write('> '),
 		read(Item),
-		shop(Item,forsale)
+		fixedUserInput(Item,Fixed),
+		shop(Fixed,forsale)
 	;	write('You have nothing to sell.'),nl,nl
 	).
 sell :-
