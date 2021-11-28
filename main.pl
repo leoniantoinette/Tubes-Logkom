@@ -219,13 +219,13 @@ writeQuest:-
             write(Stat), write(').'),nl
         ).
 
-loadFile(_) :-
+loadGame(_) :-
         in_game(true),
 	write('Unable to load because the game has started!'), nl, !.
-loadFile(FileName):-
+loadGame(FileName):-
 	\+file_exists(FileName),
 	write('File not found!'), nl, !.
-loadFile(FileName):-
+loadGame(FileName):-
 	open(FileName, read, S),
         readAll(S,Lines),
         close(S),
@@ -262,15 +262,16 @@ startGame :-
   write(' Let\'s play and pay our debts together!'), nl, nl,
   write('************************************************************'), nl,
   write('*                       Harvest Star                       *'), nl,
-  write('* 1. start  : untuk memulai permainan                      *'), nl,
-  write('* 2. map    : menampilkan peta                             *'), nl,
-  write('* 3. status : menampilkan status terkini                   *'), nl,
-  write('* 4. w      : bergerak ke utara 1 langkah                  *'), nl,
-  write('* 5. s      : bergerak ke selatan 1 langkah                *'), nl,
-  write('* 6. d      : bergerak ke timur 1 langkah                  *'), nl,
-  write('* 7. a      : bergerak ke barat 1 langkah                  *'), nl,
-  write('* 8. help   : menampilkan bantuan                          *'), nl,
-  write('* 9. quit   : untuk mengakhiri permainan                   *'), nl,
+  write('* 1. start                : untuk memulai permainan        *'), nl,
+  write('* 2. map                  : menampilkan peta               *'), nl,
+  write('* 3. status               : menampilkan status terkini     *'), nl,
+  write('* 4. w                    : bergerak ke utara 1 langkah    *'), nl,
+  write('* 5. s                    : bergerak ke selatan 1 langkah  *'), nl,
+  write('* 6. d                    : bergerak ke timur 1 langkah    *'), nl,
+  write('* 7. a                    : bergerak ke barat 1 langkah    *'), nl,
+  write('* 8. help                 : menampilkan bantuan            *'), nl,
+  write('* 9. quit                 : untuk mengakhiri permainan     *'), nl,
+  write('* 10. loadGame('Filename'): melakukan load game sebelumnya *'), nl,
   write('************************************************************').
 
 /* start */
@@ -415,17 +416,18 @@ help :-
   write('*****************************************************************'), nl,
   write('*                       ~ Harvest Star ~                        *'), nl,
   write('*                                                               *'), nl,
-  write('* 1. status      : menampilkan status terkini                   *'), nl,
-  write('* 2. map         : menampilkan peta                             *'), nl,
-  write('* 3. w           : bergerak ke utara 1 langkah                  *'), nl,
-  write('* 4. s           : bergerak ke selatan 1 langkah                *'), nl,
-  write('* 5. d           : bergerak ke timur 1 langkah                  *'), nl,
-  write('* 6. a           : bergerak ke barat 1 langkah                  *'), nl,
-  write('* 7. quit        : untuk mengakhiri permainan                   *'), nl,
-  write('* 8. inventory   : menampilkan inventory                        *'), nl,
-  write('* 9. throwItem   : membuang item yang ada di inventory          *'), nl,
-  write('* 10. quest      : mengambil quest (hanya dapat dilakukan di Q) *'), nl,
-  write('* 11. my_quest   : menampilkan on-going quest                   *'), nl,
+  write('* 1. status            : menampilkan status terkini             *'), nl,
+  write('* 2. map               : menampilkan peta                       *'), nl,
+  write('* 3. w                 : bergerak ke utara 1 langkah            *'), nl,
+  write('* 4. s                 : bergerak ke selatan 1 langkah          *'), nl,
+  write('* 5. d                 : bergerak ke timur 1 langkah            *'), nl,
+  write('* 6. a                 : bergerak ke barat 1 langkah            *'), nl,
+  write('* 7. quit              : untuk mengakhiri permainan             *'), nl,
+  write('* 8. inventory         : menampilkan inventory                  *'), nl,
+  write('* 9. throwItem         : membuang item yang ada di inventory    *'), nl,
+  write('* 10. quest            : mengambil quest (saat berada di Q)     *'), nl,
+  write('* 11. my_quest         : menampilkan on-going quest             *'), nl,
+  write('* 12. save('Filename') : menyimpan permainan                    *'), nl,
   write('*                                                               *'), nl,
   write('* Aktivitas Farming                                             *'), nl,
   write('* 1. dig         : menggali tile                                *'), nl,
