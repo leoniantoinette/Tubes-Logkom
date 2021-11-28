@@ -30,11 +30,11 @@ update_harvestTime :-
                 assertz(harvestTime(tomato_plant, 72)), !));
     (L =:= 4 -> (retractall(harvestTime(_,_)),
                 assertz(harvestTime(carrot_plant, 44)),
-                assertz(harvestTime(corn_plant, 35)),
+                assertz(harvestTime(corn_plant, 36)),
                 assertz(harvestTime(tomato_plant, 68)), !));
     (L >= 5 -> (retractall(harvestTime(_,_)),
                 assertz(harvestTime(carrot_plant, 40)),
-                assertz(harvestTime(corn_plant, 30)),
+                assertz(harvestTime(corn_plant, 32)),
                 assertz(harvestTime(tomato_plant, 64)), !))).
 
 updateFarmExp :-
