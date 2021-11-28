@@ -34,7 +34,7 @@ in_game(false).
 save(_) :-
 	in_game(false),
 	write('Unable to save because the game hasn\'t started yet!'), nl,
-	write('You have to give startGame command to start the game first'), nl, !.
+	write('You have to give start command to start the game first'), nl, !.
 save(FileName) :-
 	tell(FileName),
                 writeStatGame,
