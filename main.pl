@@ -271,7 +271,7 @@ startGame :-
   write('* 7. a                      : bergerak ke barat 1 langkah    *'), nl,
   write('* 8. help                   : menampilkan bantuan            *'), nl,
   write('* 9. quit                   : untuk mengakhiri permainan     *'), nl,
-  write('* 10. loadGame(\'Filename\'): melakukan load game sebelumnya *'), nl,
+  write('* 10. loadGame(\'Filename\')  : melakukan load game sebelumnya *'), nl,
   write('**************************************************************').
 
 /* start */
