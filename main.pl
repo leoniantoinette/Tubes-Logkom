@@ -292,7 +292,7 @@ start :-
 start :-
   !,
   initialize,
-  jobList.
+  jobList, !.
 
 /* initialize */
 initialize :-

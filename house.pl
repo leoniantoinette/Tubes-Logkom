@@ -34,17 +34,26 @@ sleep :-
   write('You went to sleep...'),
   nl, nl,
   retract(day(PrevDay)),
-  retract(time(_)),
+  retract(time(Time)),
   NewDay is PrevDay + 1,
   NewTime = 0,
   assertz(day(NewDay)),
   assertz(time(NewTime)),
+  RemainingTime is 96 - Time,
+  addSleepTime(RemainingTime),
   format('Good morning! Today is day ~w ~n', [NewDay]),
   meetSleepFairy,
   checkState.
 sleep :-
   !,
   write('You can call sleep command only if you are at home.').
+
+addSleepTime(0) :- !.
+addSleepTime(N) :-
+  N > 0,
+  addTime,
+  NewN is N - 1,
+  addSleepTime(NewN).
 
 exit :-
   in_game(false),
@@ -97,7 +106,7 @@ readDiary :-
   diary(_,_),
   !,
   write('Here are the list of your entries:'), nl,
-  forall(diary(Day,_), format(' - Day ~w ~n ~n', [Day])),
+  forall(diary(Day,_), format(' - Day ~w ~n', [Day])), nl,
   write('Which entry do you want to read?'), nl,
   write('> '),
   read(InputDay),
