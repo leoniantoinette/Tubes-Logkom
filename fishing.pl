@@ -52,6 +52,7 @@ fish :-
     random(1,90,Number),
     Result is mod(Number,Multiply),
     fishing(Result,Fishing_level),
+    addTime,
     addTime.
 fish :-
     !,

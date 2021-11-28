@@ -128,15 +128,30 @@ ranch :-
       totalOnTheRanch(ListName, ListCount, CountCow, CountChicken, CountPig),
       write('You have:'),nl,
       (   CountCow \= 0 ->
-          format('- ~w Cow ~n',[CountCow])
+          (
+              CountCow == 1 ->
+              format('- ~w Cow ~n',[CountCow])
+          ;
+              format('- ~w Cows ~n',[CountCow])
+          )
       ;!
       ),
       (   CountChicken \= 0 ->
-          format('- ~w Chicken ~n',[CountChicken])
+          (
+              CountChicken == 1 ->
+              format('- ~w Chicken ~n',[CountChicken])
+          ;
+              format('- ~w Chickens ~n',[CountChicken])
+          )
       ;!
       ),
       (   CountPig \= 0 ->
-          format('- ~w Pig ~n',[CountPig])
+          (
+              CountPig == 1 ->
+              format('- ~w Pig ~n',[CountPig])
+          ;
+              format('- ~w Pigs ~n',[CountPig])
+          )
       ;!
       ),
       write('What do you want to do?')
@@ -155,12 +170,24 @@ cow :-
   atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'cow'),
+  makeListRanch(ListRanch, ListCount),
+  totalOnTheRanch(ListRanch, ListCount, CountCow,_,_),
   (   Count == 0 ->
-      write('Your cow hasn\'t produced any milk.'), nl,
+      (   CountCow == 1 ->
+          write('Your cow hasn\'t produced any milk.'), nl
+      ;
+          write('Your cows haven\'t produced any milk.'), nl
+      ),
       write('Please check again later.')
-  ;   format('Your cow has produced ~w milks. ~n',[Count]),
+  ;   
+      (
+          CountCow ==1 ->
+          format('Your cow has produced ~w milk. ~n',[Count])
+      ;
+          format('Your cows have produced ~w milk. ~n',[Count])
+      ),
       addInventory('milk',Count),
-      format('You got ~w milks! ~n',[Count]),
+      format('You got ~w milk! ~n',[Count]),
       updateRanchExp,
       updateQuestWhenGetProductFromAnimal(Count)
   ),
@@ -179,10 +206,35 @@ chicken :-
   atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'chicken'),
+  makeListRanch(ListRanch, ListCount),
+  totalOnTheRanch(ListRanch, ListCount,_, CountChicken,_),
   (   Count == 0 ->
-      write('Your chicken hasn\'t produced any egg.'), nl,
+      (
+          CountChicken == 1 -> 
+          write('Your chicken hasn\'t produced any egg.'), nl
+      ;
+          write('Your chickens haven\'t produced any egg.'), nl
+      ),
       write('Please check again later.')
-  ;   format('Your chicken has produced ~w eggs. ~n',[Count]),
+  ;   
+      Count == 1 ->
+      (
+          CountChicken == 1 -> 
+          format('Your chicken has produced ~w egg. ~n',[Count])
+      ;
+          format('Your chickens have produced ~w egg. ~n',[Count])
+      ),
+      addInventory('egg',Count),
+      format('You got ~w egg! ~n',[Count]),
+      updateRanchExp,
+      updateQuestWhenGetProductFromAnimal(Count)
+  ;
+      (
+          CountChicken == 1 -> 
+          format('Your chicken has produced ~w eggs. ~n',[Count])
+      ;
+          format('Your chickens have produced ~w eggs. ~n',[Count])
+      ),
       addInventory('egg',Count),
       format('You got ~w eggs! ~n',[Count]),
       updateRanchExp,
@@ -203,10 +255,35 @@ pig :-
   atRanch,!,
   makeListWhoCanBeTaken(ListName, ListTProcess, ListTDeadline),
   checkWhoCanBeTaken(ListName, ListTProcess, ListTDeadline, Count, 'pig'),
+  makeListRanch(ListRanch, ListCount),
+  totalOnTheRanch(ListRanch, ListCount,_,_,CountPig),
   (   Count == 0 ->
-      write('Your pig hasn\'t produced any bacon.'), nl,
+      (
+          CountPig == 1 ->
+          write('Your pig hasn\'t produced any bacon.'), nl
+      ;
+          write('Your pigs haven\'t produced any bacon.'), nl
+      ),
       write('Please check again later.')
-  ;   format('Your pig has produced ~w bacons. ~n',[Count]),
+  ;
+      Count == 1 ->
+      (
+          CountPig == 1 ->
+          format('Your pig has produced ~w bacon. ~n',[Count])
+      ;
+          format('Your pigs have produced ~w bacon. ~n',[Count])
+      ),
+      addInventory('bacon',Count),
+      format('You got ~w bacon! ~n',[Count]),
+      updateRanchExp,
+      updateQuestWhenGetProductFromAnimal(Count)
+  ;   
+      (
+          CountPig == 1 ->
+          format('Your pig has produced ~w bacons. ~n',[Count])
+      ;
+          format('Your pigs have produced ~w bacons. ~n',[Count])
+      ),
       addInventory('bacon',Count),
       format('You got ~w bacons! ~n',[Count]),
       updateRanchExp,
