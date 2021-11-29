@@ -221,18 +221,18 @@ writeQuest:-
         ).
 
 titleLoad :-
-  	write('  _                               _'), nl,
-  	write(' | |__   __ _ _ ____   _____  ___| |_'), nl,
-  	write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
-  	write(' | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
-  	write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
+  	write('                              _                               _'), nl,
+  	write('                             | |__   __ _ _ ____   _____  ___| |_'), nl,
+  	write('                             | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
+  	write('                             | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
+  	write('                             |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
 	write(' _____________________________________________________________________________________________'), nl,
 	write('|                                                                                             |'), nl,
 	write('| Welcome back! Now, Claire\'s life is in danger.                                              |'), nl,
 	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'), nl,	
 	write('| Help Claire return to pay off her debt!                                                     |'), nl,
 	write('|____________________________________________________________________________________________ |'), nl,nl,
-	write('This is the last state before you leave it.'),nl.
+	write('                             This is the last state before you leave it.'),nl.
 
 loadGame(_) :-
         in_game(true),
@@ -271,26 +271,32 @@ startGame :-
   write('You have started this game').
 startGame :-
 	!,
-  write('  _                               _'), nl,
-  write(' | |__   __ _ _ ____   _____  ___| |_'), nl,
-  write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
-  write(' | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
-  write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
-  write('            Harvest Star!'), nl,
-  write(' Let\'s play and pay our debts together!'), nl, nl,
-  write('**************************************************************'), nl,
-  write('*                         Harvest Star                       *'), nl,
-  write('* 1. start                  : untuk memulai permainan        *'), nl,
-  write('* 2. map                    : menampilkan peta               *'), nl,
-  write('* 3. status                 : menampilkan status terkini     *'), nl,
-  write('* 4. w                      : bergerak ke utara 1 langkah    *'), nl,
-  write('* 5. s                      : bergerak ke selatan 1 langkah  *'), nl,
-  write('* 6. d                      : bergerak ke timur 1 langkah    *'), nl,
-  write('* 7. a                      : bergerak ke barat 1 langkah    *'), nl,
-  write('* 8. help                   : menampilkan bantuan            *'), nl,
-  write('* 9. quit                   : untuk mengakhiri permainan     *'), nl,
-  write('* 10. loadGame(\'Filename\')  : melakukan load game sebelumnya *'), nl,
-  write('**************************************************************').
+  write('                                                         _                               _'), nl,
+  write('                                                        | |__   __ _ _ ____   _____  ___| |_'), nl,
+  write('                                                        | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
+  write('                                                        | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
+  write('                                                        |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
+  write(' _________________________________________________________________________________________________________________________________________________________'), nl,
+  write('|                                                                                                                                                         |'), nl,
+  write('| Claire is a girl who has just been scammed by a client who magically disappeared without paying for a project she worked so hard to build.              |'), nl,
+  write('| In addition to being a victim of fraud, Claire is also in debt of 20000 gold which needs to be repaid within 1 year                                     |'), nl,	
+  write('| Therefore, Claire decided to return to her hometown and continue her grandfather\'s farming business to be able to continue living and pay off her debt. |'), nl,
+  write('|_________________________________________________________________________________________________________________________________________________________|'), nl,nl,
+  write('                                                                    Harvest Star!'), nl,
+  write('                                                     Let\'s play and pay our debts together!'), nl, nl,
+  write('                                            **************************************************************'), nl,
+  write('                                            *                         Harvest Star                       *'), nl,
+  write('                                            * 1. start                  : untuk memulai permainan        *'), nl,
+  write('                                            * 2. map                    : menampilkan peta               *'), nl,
+  write('                                            * 3. status                 : menampilkan status terkini     *'), nl,
+  write('                                            * 4. w                      : bergerak ke utara 1 langkah    *'), nl,
+  write('                                            * 5. s                      : bergerak ke selatan 1 langkah  *'), nl,
+  write('                                            * 6. d                      : bergerak ke timur 1 langkah    *'), nl,
+  write('                                            * 7. a                      : bergerak ke barat 1 langkah    *'), nl,
+  write('                                            * 8. help                   : menampilkan bantuan            *'), nl,
+  write('                                            * 9. quit                   : untuk mengakhiri permainan     *'), nl,
+  write('                                            * 10. loadGame(\'Filename\')  : melakukan load game sebelumnya *'), nl,
+  write('                                            **************************************************************').
 
 /* start */
 jobList :- 
