@@ -1,12 +1,9 @@
-%TODO:
-%handle user input
-
 checkLevelEquipment(Name):-
 	inventory(_,Name,_,_,Price,_,_,Level),
 	(   Level >= 3 ->
-	    write('You can`t level up your equipment anymore because it`s already reached its maximum!')
+	    write('You can\'t level up your equipment anymore because it`s already reached its maximum!'),nl
 	;   addInventory(Name,1),
-	    format('Yeay, your ~? equipment level has increased ~n', [Name]),
+	    format('Yeay, your ~w equipment level has increased ~n', [Name]),
 			retract(gold(Money)),
 			Currentmoney is Money - Price,
 			assertz(gold(Currentmoney))

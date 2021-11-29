@@ -1,5 +1,3 @@
-%TODO:
-%handle user input
 :- dynamic(inventory/8).
 /* Format Berupa item(ID, Name, Type, Role, Price, isInventory, _)
  * UNTUK TYPE = BARANG, LIST KE-8 (_) BERUPA COUNT
@@ -56,11 +54,20 @@ isNameInventory(NAME,[NAME|_]).
 isNameInventory(NAME,[_|T]):-
     isNameInventory(NAME,T).
 
-addInventory(_,_):-
+addInventory(Name,_):-
     totalInventory(Total),
     Total >= 100,
-    write('Your inventory is full!'),
-    !,fail.
+    item(_,Name,Type,_,_,_,_),
+    (   
+        Type == equipment ->
+        retract(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,Count)),
+        UpdateCount is Count+1,
+        assertz(inventory(ID,Name,Type,Role,Price,IsInventory,StatusMarket,UpdateCount))
+    ;
+        write('Your inventory is full!'),
+        !,fail
+    ).
+
 addInventory(Name,Addition):-
     item(ID,Name,_,_,_,_,_),
     findall(Id, inventory(Id,_,_,_,_,_,_,_), ListId),
