@@ -36,7 +36,7 @@ save(_) :-
 	write('Unable to save because the game hasn\'t started yet!'), nl,
 	write('You have to give start command to start the game first'), nl, !.
 save(FileName) :-
-        write('successfully save the game!'),nl,
+        write('Successfully save the game!'), nl,
 	tell(FileName),
                 writeStatGame,
 		writeInventory,
@@ -226,12 +226,12 @@ titleLoad :-
   	write(' | \'_ \\ / _` | \'__\\ \\ / / _ \\/ __| __|'), nl,
   	write(' | | | | (_| | |   \\ V /  __/\\__ \\ |_'), nl,
   	write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
-	write(' _____________________________________________________________________________________________'),nl,
-	write('|                                                                                             |'),nl,
-	write('| Welcome back! Now, Claire's life is in danger.                                              |'),nl,
-	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'),nl,	
-	write('| Help Claire return to pay off her debt!                                                     |'),nl,
-	write('|____________________________________________________________________________________________ |'),nl,
+	write(' _____________________________________________________________________________________________'), nl,
+	write('|                                                                                             |'), nl,
+	write('| Welcome back! Now, Claire's life is in danger.                                              |'), nl,
+	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'), nl,	
+	write('| Help Claire return to pay off her debt!                                                     |'), nl,
+	write('|____________________________________________________________________________________________ |'), nl.
 
 loadGame(_) :-
         in_game(true),
