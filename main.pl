@@ -231,7 +231,7 @@ titleLoad :-
 	write('| Welcome back! Now, Claire\'s life is in danger.                                              |'), nl,
 	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'), nl,	
 	write('| Help Claire return to pay off her debt!                                                     |'), nl,
-	write('|____________________________________________________________________________________________ |'), nl,nl,
+	write('|_____________________________________________________________________________________________|'), nl,nl,
 	write('                             This is the last state before you leave it.'),nl.
 
 loadGame(_) :-
@@ -282,8 +282,8 @@ startGame :-
   write('| In addition to being a victim of fraud, Claire is also in debt of 20000 gold which needs to be repaid within 1 year                                     |'), nl,	
   write('| Therefore, Claire decided to return to her hometown and continue her grandfather\'s farming business to be able to continue living and pay off her debt. |'), nl,
   write('|_________________________________________________________________________________________________________________________________________________________|'), nl,nl,
-  write('                                                                    Harvest Star!'), nl,
-  write('                                                     Let\'s play and pay our debts together!'), nl, nl,
+  write('                                                                      Harvest Star!'), nl,
+  write('                                                         Let\'s play and pay our debts together!'), nl, nl,
   write('                                            **************************************************************'), nl,
   write('                                            *                         Harvest Star                       *'), nl,
   write('                                            * 1. start                  : untuk memulai permainan        *'), nl,
