@@ -231,7 +231,8 @@ titleLoad :-
 	write('| Welcome back! Now, Claire\'s life is in danger.                                              |'), nl,
 	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'), nl,	
 	write('| Help Claire return to pay off her debt!                                                     |'), nl,
-	write('|____________________________________________________________________________________________ |'), nl.
+	write('|____________________________________________________________________________________________ |'), nl,nl,
+	write('This is the last state before you leave it.'),nl.
 
 loadGame(_) :-
         in_game(true),
@@ -246,7 +247,10 @@ loadGame(FileName):-
         assertAll(Lines),
         retract(in_game(false)),
 	titleLoad,nl,nl,
-	map, !.
+	map,nl,
+	write('Status:'),nl,
+	status,
+	!.
 
 assertAll([]) :- !.
 assertAll([X|L]):-
