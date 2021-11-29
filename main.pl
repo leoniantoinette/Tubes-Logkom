@@ -228,7 +228,7 @@ titleLoad :-
   	write(' |_| |_|\\__,_|_|    \\_/ \\___||___/\\__|'), nl, nl,
 	write(' _____________________________________________________________________________________________'), nl,
 	write('|                                                                                             |'), nl,
-	write('| Welcome back! Now, Claire's life is in danger.                                              |'), nl,
+	write('| Welcome back! Now, Claire\'s life is in danger.                                              |'), nl,
 	write('| Claire had almost ended her journey. However, just in time, you have returned to save him!  |'), nl,	
 	write('| Help Claire return to pay off her debt!                                                     |'), nl,
 	write('|____________________________________________________________________________________________ |'), nl.
