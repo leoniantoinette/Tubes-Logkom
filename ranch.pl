@@ -6,6 +6,27 @@
  * Jadi yang mengalami perubahan itu sewaktu membeli hewan ternak, maka batas waktu garap hasil ternaknya akan berkurang.
  */
 
+titleRanch:-
+  write('================WELCOME TO THE RANCH==============='), nl,
+  write('                                                   '), nl,
+  write('                         /\\                        '), nl,
+  write('                        /  \\                       '), nl,
+  write('                       /|  |\\                      '), nl,
+  write('                        |  |                       '), nl,
+  write('                 _______|  |_______________________  '), nl,
+  write('                /\\                                | '), nl,
+  write('               /  \\                               | '), nl,
+  write('              / __ \\                              | '), nl,
+  write('             / |  | \\                             | '), nl,
+  write('            /  |__|  \\                            | '), nl,
+  write('           /          \\                           | '), nl,
+  write('          /============\\ _________________________| '), nl,
+  write('         /|   _____    |\\    ___    ___    ___    | '), nl,
+  write('          |  |  |  |   |    |___|  |___|  |___|   | '), nl,
+  write('  |---|---|  | =|= |   |                          | '), nl,
+  write('  |---|---|  |  |  |   |                          | '), nl,
+  write('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'), nl.
+
 updateRanchExp :-
     retract(exp_ranching(A)),
     retract(exp_pemain(B)),
@@ -120,7 +141,7 @@ ranch :-
 ranch :-
   in_game(true),
   atRanch,!,
-  write('Welcome to the ranch!'), nl,
+  titleRanch,nl,
   (   checkWhenRanchEmpty ->
       write('You don`t have any animals in the ranch'),
       !
